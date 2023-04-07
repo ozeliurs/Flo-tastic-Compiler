@@ -7,6 +7,12 @@ import arbre_abstrait
 class FloParser(Parser):
     # On récupère la liste des lexèmes de l'analyse lexicale
     tokens = FloLexer.tokens
+    debugfile = 'parser.out'
+
+    precedence = (
+        ('left', "+", "-"),
+        ('left', "*", "/", "%"),
+    )
 
     # Règles gramaticales et actions associées
 
@@ -37,9 +43,25 @@ class FloParser(Parser):
     def expr(self, p):
         return arbre_abstrait.Operation('+', p[0], p[2])
 
+    @_('expr "-" expr')
+    def expr(self, p):
+        return arbre_abstrait.Operation('-', p[0], p[2])
+
+    @_('"-" expr')
+    def expr(self, p):
+        return arbre_abstrait.Operation('-', arbre_abstrait.Entier(0), p[1])
+
     @_('expr "*" expr')
     def expr(self, p):
         return arbre_abstrait.Operation('*', p[0], p[2])
+
+    @_('expr "/" expr')
+    def expr(self, p):
+        return arbre_abstrait.Operation('/', p[0], p[2])
+
+    @_('expr "%" expr')
+    def expr(self, p):
+        return arbre_abstrait.Operation('%', p[0], p[2])
 
     @_('"(" expr ")"')
     def expr(self, p):
