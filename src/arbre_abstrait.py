@@ -1,19 +1,28 @@
 """
 Affiche une chaine de caractère avec une certaine identation
 """
+from enum import Enum
 
 
 def afficher(s, indent=0):
     print(" " * indent + s)
 
 
+class Identifiant:
+    def __init__(self, nom: str):
+        self.nom = nom
+
+    def afficher(self, indent=0):
+        afficher("[Identifiant:" + str(self.nom) + "]", indent)
+
+
 class Programme:
-    def __init__(self, listeInstructions):
-        self.listeInstructions = listeInstructions
+    def __init__(self, liste_instructions):
+        self.liste_instructions = liste_instructions
 
     def afficher(self, indent=0):
         afficher("<programme>", indent)
-        self.listeInstructions.afficher(indent + 1)
+        self.liste_instructions.afficher(indent + 1)
         afficher("</programme>", indent)
 
 
@@ -22,10 +31,10 @@ class ListeInstructions:
         self.instructions = []
 
     def afficher(self, indent=0):
-        afficher("<listeInstructions>", indent)
+        afficher("<liste_instructions>", indent)
         for instruction in self.instructions:
             instruction.afficher(indent + 1)
-        afficher("</listeInstructions>", indent)
+        afficher("</liste_instructions>", indent)
 
 
 class Ecrire:
@@ -53,7 +62,7 @@ class Operation:
 
 
 class Entier:
-    def __init__(self, valeur):
+    def __init__(self, valeur: int):
         self.valeur = valeur
 
     def afficher(self, indent=0):
@@ -93,7 +102,7 @@ class FunctionArgument:
 
 
 class FunctionCall:
-    def __init__(self, nom, args):
+    def __init__(self, nom: str, args):
         self.nom = nom
         self.args = args
 
@@ -114,17 +123,16 @@ class Lire:
         afficher("</lire>", indent)
 
 
-class Identifiant:
-    def __init__(self, nom):
-        self.nom = nom
-
-    def afficher(self, indent=0):
-        afficher("[Identifiant:" + str(self.nom) + "]", indent)
+class TypeEnum(Enum):
+    ENTIER = 1
+    FLOAT = 2
+    STRING = 3
+    BOOL = 4
 
 
 class Type:
-    def __init__(self, type):
-        self.type = type
+    def __init__(self, _type: TypeEnum):
+        self._type = _type
 
     def afficher(self, indent=0):
-        afficher("[Type:" + str(self.type) + "]", indent)
+        afficher("[Type:" + str(self._type) + "]", indent)

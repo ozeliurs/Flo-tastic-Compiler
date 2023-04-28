@@ -19,11 +19,11 @@ class TestFloLexer(TestCase):
 
     def test_integer(self):
         tokens = self.lexer.tokenize('1')
-        self.assertTrue(list(tokens)[0].type == 'ENTIER')
+        self.assertTrue(list(tokens)[0]._type == 'ENTIER')
 
     def test_float(self):
         tokens = self.lexer.tokenize('1.0')
-        self.assertTrue(list(tokens)[0].type == 'FLOAT')
+        self.assertTrue(list(tokens)[0]._type == 'FLOAT')
 
     def test_files(self):
         for file in self.TEST_FILES:
