@@ -1,3 +1,3 @@
 entier a = 5;
 entier b = 10;
-ecrire(func(a, b));
+ecrire(func(lire(), b));

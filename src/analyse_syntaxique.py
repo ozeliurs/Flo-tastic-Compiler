@@ -41,8 +41,12 @@ class FloParser(Parser):
     def ecrire(self, p):
         return arbre_abstrait.Ecrire(p.expr)  # p.expr = p[2]
 
+    @_('lire')
+    def instruction(self, p):
+        return p[0]
+
     @_('LIRE "(" expr ")" ";"')
-    def expr(self, p):
+    def lire(self, p):
         return arbre_abstrait.Lire(p.IDENTIFIANT)
 
     # === Function Call ===
@@ -84,14 +88,18 @@ class FloParser(Parser):
     def expr(self, p):
         return arbre_abstrait.Operation('-', arbre_abstrait.Entier(0), p[1])
 
-    # === Affectation ===
+    # === Affectation & Définitions ===
     @_('TYPE IDENTIFIANT "=" expr ";"')
     def instruction(self, p):
-        return arbre_abstrait.Affectation(p.IDENTIFIANT, p.expr)
+        return arbre_abstrait.DefAndAffect(p.TYPE, p.IDENTIFIANT, p.expr)
 
     @_('TYPE IDENTIFIANT ";"')
     def instruction(self, p):
-        return arbre_abstrait.Affectation(p.IDENTIFIANT)
+        return arbre_abstrait.Définition(p.IDENTIFIANT)
+
+    @_('IDENTIFIANT "=" expr ";"')
+    def instruction(self, p):
+        return arbre_abstrait.Affectation(p.IDENTIFIANT, p.expr)
 
     # === simple expr translate ===
     @_('ENTIER')

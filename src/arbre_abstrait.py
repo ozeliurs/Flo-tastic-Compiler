@@ -38,6 +38,11 @@ class Ecrire:
         afficher("</ecrire>", indent)
 
 
+class Lire:
+    def afficher(self, indent=0):
+        afficher("</lire>", indent)
+
+
 class Operation:
     def __init__(self, op, exp1, exp2):
         self.exp1 = exp1
@@ -104,16 +109,6 @@ class FunctionCall:
         afficher("</functionCall>", indent)
 
 
-class Lire:
-    def __init__(self, var):
-        self.var = var
-
-    def afficher(self, indent=0):
-        afficher("<lire>", indent)
-        self.var.afficher(indent + 1)
-        afficher("</lire>", indent)
-
-
 class Identifiant:
     def __init__(self, nom):
         self.nom = nom
@@ -128,3 +123,17 @@ class Type:
 
     def afficher(self, indent=0):
         afficher("[Type:" + str(self.type) + "]", indent)
+
+
+class Définition:
+    def __init__(self, type, nom, args=None):
+        self.type = type
+        self.nom = nom
+        self.args = args
+
+    def afficher(self, indent=0):
+        afficher("<définition>", indent)
+        print(self.type)
+        self.nom.afficher(indent + 1)
+        self.args.afficher(indent + 1)
+        afficher("</définition>", indent)
