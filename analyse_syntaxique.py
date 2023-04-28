@@ -41,10 +41,6 @@ class FloParser(Parser):
     def ecrire(self, p):
         return arbre_abstrait.Ecrire(p.expr)  # p.expr = p[2]
 
-    @_('lire')
-    def instruction(self, p):
-        return p[0]
-
     @_('LIRE "(" expr ")" ";"')
     def expr(self, p):
         return arbre_abstrait.Lire(p.IDENTIFIANT)
@@ -57,7 +53,7 @@ class FloParser(Parser):
     @_('expr "(" expr ")"')
     def expr(self, p):
         print(p)
-        return arbre_abstrait.Operation(p[0], p[2], p[4])
+        return arbre_abstrait.FunctionCall(p[0], p[2])
 
     # === Math operators ===
     @_('expr "+" expr')

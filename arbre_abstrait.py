@@ -92,6 +92,18 @@ class FunctionArgument:
         afficher("</functionArgument>", indent)
 
 
+class FunctionCall:
+    def __init__(self, nom, args):
+        self.nom = nom
+        self.args = args
+
+    def afficher(self, indent=0):
+        afficher("<functionCall>", indent)
+        self.nom.afficher(indent + 1)
+        self.args.afficher(indent + 1)
+        afficher("</functionCall>", indent)
+
+
 class Lire:
     def __init__(self, var):
         self.var = var
