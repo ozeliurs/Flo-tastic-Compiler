@@ -1,7 +1,9 @@
 import sys
+
 from sly import Parser
-from analyse_lexicale import FloLexer
+
 import arbre_abstrait
+from analyse_lexicale import FloLexer
 
 
 class FloParser(Parser):
@@ -15,8 +17,7 @@ class FloParser(Parser):
     )
 
     # Règles gramaticales et actions associées
-<<<<<<< Updated upstream
-=======
+
     @_('TYPE IDENTIFIANT "=" expr ";"')
     def instruction(self, p):
         return arbre_abstrait.Affectation(p.IDENTIFIANT, p.expr)
@@ -24,7 +25,6 @@ class FloParser(Parser):
     @_('TYPE IDENTIFIANT ";"')
     def instruction(self, p):
         return arbre_abstrait.Affectation(p.IDENTIFIANT)
->>>>>>> Stashed changes
 
     @_('listeInstructions')
     def prog(self, p):
