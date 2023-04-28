@@ -1,2 +1,3 @@
 entier a = 5;
-ecrire(a);
+entier b = 10;
+ecrire(b);

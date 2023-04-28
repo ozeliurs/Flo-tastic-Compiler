@@ -16,16 +16,7 @@ class FloParser(Parser):
         ('left', "*", "/", "%"),
     )
 
-    # Règles gramaticales et actions associées
-
-    @_('TYPE IDENTIFIANT "=" expr ";"')
-    def instruction(self, p):
-        return arbre_abstrait.Affectation(p.IDENTIFIANT, p.expr)
-
-    @_('TYPE IDENTIFIANT ";"')
-    def instruction(self, p):
-        return arbre_abstrait.Affectation(p.IDENTIFIANT)
-
+    # === Programme prof ===
     @_('listeInstructions')
     def prog(self, p):
         return arbre_abstrait.Programme(p[0])
@@ -41,30 +32,34 @@ class FloParser(Parser):
         p[1].instructions.append(p[0])
         return p[1]
 
+    # === Lire et Ecrire ===
     @_('ecrire')
     def instruction(self, p):
         return p[0]
 
-    @_('expr "," expr')
-    def expr(self, p):
-        return arbre_abstrait.FunctionArgument(p[0], p[2])
-    @_('IDENTIFIANT')
-    def expr(self, p):
-        return arbre_abstrait.Identifiant(p.IDENTIFIANT)
-
     @_('ECRIRE "(" expr ")" ";"')
     def ecrire(self, p):
         return arbre_abstrait.Ecrire(p.expr)  # p.expr = p[2]
+
+    @_('lire')
+    def instruction(self, p):
+        return p[0]
+
+    @_('LIRE "(" expr ")" ";"')
+    def expr(self, p):
+        return arbre_abstrait.Lire(p.IDENTIFIANT)
+
+    # === Function Call ===
+    @_('expr "," expr')
+    def expr(self, p):
+        return arbre_abstrait.FunctionArgument(p[0], p[2])
 
     @_('expr "(" expr ")"')
     def expr(self, p):
         print(p)
         return arbre_abstrait.Operation(p[0], p[2], p[4])
 
-    @_('LIRE "(" IDENTIFIANT ")" ";"')
-    def expr(self, p):
-        return arbre_abstrait.Lire(p.IDENTIFIANT)
-
+    # === Math operators ===
     @_('expr "+" expr')
     def expr(self, p):
         return arbre_abstrait.Operation('+', p[0], p[2])
@@ -72,10 +67,6 @@ class FloParser(Parser):
     @_('expr "-" expr')
     def expr(self, p):
         return arbre_abstrait.Operation('-', p[0], p[2])
-
-    @_('"-" expr')
-    def expr(self, p):
-        return arbre_abstrait.Operation('-', arbre_abstrait.Entier(0), p[1])
 
     @_('expr "*" expr')
     def expr(self, p):
@@ -93,12 +84,26 @@ class FloParser(Parser):
     def expr(self, p):
         return p.expr  # ou p[1]
 
+    @_('"-" expr')
+    def expr(self, p):
+        return arbre_abstrait.Operation('-', arbre_abstrait.Entier(0), p[1])
+
+    # === Affectation ===
+    @_('TYPE IDENTIFIANT "=" expr ";"')
+    def instruction(self, p):
+        return arbre_abstrait.Affectation(p.IDENTIFIANT, p.expr)
+
+    @_('TYPE IDENTIFIANT ";"')
+    def instruction(self, p):
+        return arbre_abstrait.Affectation(p.IDENTIFIANT)
+
+    # === simple expr translate ===
     @_('ENTIER')
     def expr(self, p):
         return arbre_abstrait.Entier(p.ENTIER)
 
     @_('IDENTIFIANT')
-    def identifiant(self, p):
+    def expr(self, p):
         return arbre_abstrait.Identifiant(p.IDENTIFIANT)
 
 
