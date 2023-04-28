@@ -80,6 +80,18 @@ class Affectation:
         afficher("</affectation>", indent)
 
 
+class FunctionArgument:
+    def __init__(self, left, right):
+        self.left = left
+        self.right = right
+
+    def afficher(self, indent=0):
+        afficher("<functionArgument>", indent)
+        self.left.afficher(indent + 1)
+        self.right.afficher(indent + 1)
+        afficher("</functionArgument>", indent)
+
+
 class Lire:
     def __init__(self, var):
         self.var = var

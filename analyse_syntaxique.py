@@ -45,6 +45,9 @@ class FloParser(Parser):
     def instruction(self, p):
         return p[0]
 
+    @_('expr "," expr')
+    def expr(self, p):
+        return arbre_abstrait.FunctionArgument(p[0], p[2])
     @_('IDENTIFIANT')
     def expr(self, p):
         return arbre_abstrait.Identifiant(p.IDENTIFIANT)
@@ -52,6 +55,11 @@ class FloParser(Parser):
     @_('ECRIRE "(" expr ")" ";"')
     def ecrire(self, p):
         return arbre_abstrait.Ecrire(p.expr)  # p.expr = p[2]
+
+    @_('expr "(" expr ")"')
+    def expr(self, p):
+        print(p)
+        return arbre_abstrait.Operation(p[0], p[2], p[4])
 
     @_('LIRE "(" IDENTIFIANT ")" ";"')
     def expr(self, p):
@@ -87,7 +95,7 @@ class FloParser(Parser):
 
     @_('ENTIER')
     def expr(self, p):
-        return arbre_abstrait.Entier(p.ENTIER)  # p.ENTIER = p[0]
+        return arbre_abstrait.Entier(p.ENTIER)
 
     @_('IDENTIFIANT')
     def identifiant(self, p):
