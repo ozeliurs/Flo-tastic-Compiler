@@ -17,7 +17,7 @@ class FloParser(Parser):
     )
 
     # === Programme prof ===
-    @_('listeInstructions')
+    @_('liste_instructions')
     def prog(self, p):
         return arbre_abstrait.Programme(p[0])
 
@@ -27,7 +27,7 @@ class FloParser(Parser):
         l.instructions.append(p[0])
         return l
 
-    @_('instruction listeInstructions')
+    @_('instruction liste_instructions')
     def listeInstructions(self, p):
         p[1].instructions.append(p[0])
         return p[1]

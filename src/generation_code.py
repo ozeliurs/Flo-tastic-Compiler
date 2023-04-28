@@ -82,7 +82,7 @@ def gen_programme(programme):
     printifm('section\t.text')
     printifm('global _start')
     printifm('_start:')
-    gen_listeInstructions(programme.listeInstructions)
+    gen_listeInstructions(programme.liste_instructions)
     nasm_instruction("mov", "eax", "1", "", "1 est le code de SYS_EXIT")
     nasm_instruction("int", "0x80", "", "", "exit")
 
@@ -106,7 +106,7 @@ def gen_instruction(instruction):
     if type(instruction) == arbre_abstrait.Ecrire:
         gen_ecrire(instruction)
     else:
-        print("type instruction inconnu", type(instruction))
+        print("_type instruction inconnu", type(instruction))
         exit(0)
 
 
@@ -132,7 +132,7 @@ def gen_expression(expression):
     elif type(expression) == arbre_abstrait.Entier:
         nasm_instruction("push", str(expression.valeur), "", "", "");  # on met sur la pile la valeur entière
     else:
-        print("type d'expression inconnu", type(expression))
+        print("_type d'expression inconnu", type(expression))
         exit(0)
 
 
