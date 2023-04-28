@@ -15,6 +15,16 @@ class FloParser(Parser):
     )
 
     # Règles gramaticales et actions associées
+<<<<<<< Updated upstream
+=======
+    @_('TYPE IDENTIFIANT "=" expr ";"')
+    def instruction(self, p):
+        return arbre_abstrait.Affectation(p.IDENTIFIANT, p.expr)
+
+    @_('TYPE IDENTIFIANT ";"')
+    def instruction(self, p):
+        return arbre_abstrait.Affectation(p.IDENTIFIANT)
+>>>>>>> Stashed changes
 
     @_('listeInstructions')
     def prog(self, p):
@@ -35,9 +45,17 @@ class FloParser(Parser):
     def instruction(self, p):
         return p[0]
 
+    @_('IDENTIFIANT')
+    def expr(self, p):
+        return arbre_abstrait.Identifiant(p.IDENTIFIANT)
+
     @_('ECRIRE "(" expr ")" ";"')
     def ecrire(self, p):
         return arbre_abstrait.Ecrire(p.expr)  # p.expr = p[2]
+
+    @_('LIRE "(" IDENTIFIANT ")" ";"')
+    def expr(self, p):
+        return arbre_abstrait.Lire(p.IDENTIFIANT)
 
     @_('expr "+" expr')
     def expr(self, p):
@@ -70,6 +88,10 @@ class FloParser(Parser):
     @_('ENTIER')
     def expr(self, p):
         return arbre_abstrait.Entier(p.ENTIER)  # p.ENTIER = p[0]
+
+    @_('IDENTIFIANT')
+    def identifiant(self, p):
+        return arbre_abstrait.Identifiant(p.IDENTIFIANT)
 
 
 if __name__ == '__main__':

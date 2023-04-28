@@ -41,7 +41,61 @@ class Operation:
 		self.exp2.afficher(indent+1)
 		afficher("</operation>",indent)
 class Entier:
+<<<<<<< Updated upstream
 	def __init__(self,valeur):
 		self.valeur = valeur
 	def afficher(self,indent=0):
 		afficher("[Entier:"+str(self.valeur)+"]",indent)
+=======
+    def __init__(self, valeur):
+        self.valeur = valeur
+
+    def afficher(self, indent=0):
+        afficher("[Entier:" + str(self.valeur) + "]", indent)
+
+
+class Variable:
+    def __init__(self, nom):
+        self.nom = nom
+
+    def afficher(self, indent=0):
+        afficher("[Variable:" + str(self.nom) + "]", indent)
+
+
+class Affectation:
+    def __init__(self, var, exp=None):
+        self.var = var
+        self.exp = exp
+
+    def afficher(self, indent=0):
+        afficher("<affectation>", indent)
+        afficher(self.var, indent + 1)
+        self.exp.afficher(indent + 1)
+        afficher("</affectation>", indent)
+
+
+class Lire:
+    def __init__(self, var):
+        self.var = var
+
+    def afficher(self, indent=0):
+        afficher("<lire>", indent)
+        self.var.afficher(indent + 1)
+        afficher("</lire>", indent)
+
+
+class Identifiant:
+    def __init__(self, nom):
+        self.nom = nom
+
+    def afficher(self, indent=0):
+        afficher("[Identifiant:" + str(self.nom) + "]", indent)
+
+
+class Type:
+    def __init__(self, type):
+        self.type = type
+
+    def afficher(self, indent=0):
+        afficher("[Type:" + str(self.type) + "]", indent)
+>>>>>>> Stashed changes
