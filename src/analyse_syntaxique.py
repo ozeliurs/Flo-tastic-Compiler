@@ -87,13 +87,19 @@ class FloParser(Parser):
         p[2].insert(0, p[0])
         return p[2]
 
-    @_('expr "+" expr')
+    @_('expr "+" expr',
+       'expr "-" expr',
+       'expr "*" expr',
+       'expr "/" expr',
+       'expr "%" expr',
+       'expr SUPERIEUR expr',
+       'expr INFERIEUR expr',
+       'expr INFERIEUR_OU_EGAL expr',
+       'expr SUPERIEUR_OU_EGAL expr',
+       'expr EGAL expr',
+       'expr DIFFERENT expr',)
     def expr(self, p):
-        return arbre_abstrait.Operation('+', p[0], p[2])
-
-    @_('expr "*" expr')
-    def expr(self, p):
-        return arbre_abstrait.Operation('*', p[0], p[2])
+        return arbre_abstrait.Operation(p[1], p[0], p[2])
 
     @_('"(" expr ")"')
     def expr(self, p):
@@ -113,7 +119,7 @@ class FloParser(Parser):
 
     @_('IDENTIFIANT')
     def expr(self, p):
-        return arbre_abstrait.Variable(p.IDENTIFIANT)
+        return arbre_abstrait.VariableRead(p.IDENTIFIANT)
 
 
 if __name__ == '__main__':

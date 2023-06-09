@@ -1,1 +1,4 @@
-entier a = a + VRAI;
+booleen a = VRAI;
+entier b=36;
+entier c;
+c=b+1;

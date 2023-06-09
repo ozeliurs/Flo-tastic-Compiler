@@ -8,7 +8,7 @@ class FloLexer(Lexer):
     tokens = {
         TYPE, ET, OU, NON, SI, SINONSI,
         SINON, TANTQUE, RETOURNER, EGAL, DIFFERENT, INFERIEUR_OU_EGAL,
-        SUPERIEUR_OU_EGAL, INFERIEUR, SUPERIEUR, VRAI, FAUX, BOOLEAN,IDENTIFIANT, ENTIER, FLOAT
+        SUPERIEUR_OU_EGAL, INFERIEUR, SUPERIEUR, VRAI, FAUX, BOOLEAN,IDENTIFIANT, ENTIER,
     }
 
     # Les caractères litéraux sont des caractères uniques qui sont retournés tel quel quand rencontré par l'analyse lexicale.
@@ -33,16 +33,16 @@ class FloLexer(Lexer):
     IDENTIFIANT = r'[a-zA-Z][a-zA-Z0-9_]*'  # en général, variable ou nom de fonction
 
     # cas spéciaux:
-    IDENTIFIANT['SI'] = SI
+    IDENTIFIANT['si'] = SI
     IDENTIFIANT['entier'] = TYPE
     IDENTIFIANT['booleen'] = TYPE
-    IDENTIFIANT['ET'] = ET
-    IDENTIFIANT['OU'] = OU
-    IDENTIFIANT['NON'] = NON
-    IDENTIFIANT['SINON'] = SINON
-    IDENTIFIANT['SINONSI'] = SINONSI
-    IDENTIFIANT['TANTQUE'] = TANTQUE
-    IDENTIFIANT['RETOURNER'] = RETOURNER
+    IDENTIFIANT['et'] = ET
+    IDENTIFIANT['ou'] = OU
+    IDENTIFIANT['non'] = NON
+    IDENTIFIANT['sinonsi'] = SINONSI
+    IDENTIFIANT['sinon'] = SINON
+    IDENTIFIANT['tantque'] = TANTQUE
+    IDENTIFIANT['retourner'] = RETOURNER
 
     @_(r'0|[1-9][0-9]*')
     def ENTIER(self, t):
