@@ -9,15 +9,10 @@ from analyse_lexicale import FloLexer
 class FloParser(Parser):
     # On récupère la liste des lexèmes de l'analyse lexicale
     tokens = FloLexer.tokens
-    debugfile = 'parser.out'
 
-    precedence = (
-        ('left', "+", "-"),
-        ('left', "*", "/", "%"),
-    )
+    # Règles gramaticales et actions associées
 
-    # === Programme prof ===
-    @_('liste_instructions')
+    @_('listeInstructions')
     def prog(self, p):
         return arbre_abstrait.Programme(p[0])
 
@@ -27,88 +22,94 @@ class FloParser(Parser):
         l.instructions.append(p[0])
         return l
 
-    @_('instruction liste_instructions')
+    @_('instruction listeInstructions')
     def listeInstructions(self, p):
         p[1].instructions.append(p[0])
         return p[1]
 
-    # === Lire et Ecrire ===
-    @_('ecrire')
+    @_('variable_definition', 'variable_assignment', 'variable_definition_assignment', 'function_call')
     def instruction(self, p):
         return p[0]
 
-    @_('ECRIRE "(" expr ")" ";"')
-    def ecrire(self, p):
-        return arbre_abstrait.Ecrire(p.expr)  # p.expr = p[2]
+    """
+    VARIABLE
+    """
 
-    @_('lire')
+    @_('TYPE IDENTIFIANT ";"')
+    def variable_definition(self, p):
+        return arbre_abstrait.VariableDefinition(p[0], p.IDENTIFIANT)
+
+    @_('IDENTIFIANT "=" expr ";"')
+    def variable_assignment(self, p):
+        return arbre_abstrait.VariableAssignment(p.IDENTIFIANT, p.expr)
+
+    @_('TYPE IDENTIFIANT "=" expr ";"')
+    def variable_definition_assignment(self, p):
+        return arbre_abstrait.VariableDefinitionAssignment(p[0], p.IDENTIFIANT, p.expr)
+
+    """
+    FUNCTION CALL
+    """
+
+    @_('IDENTIFIANT "(" expr_list ")"')
+    def function_call(self, p):
+        return arbre_abstrait.FunctionCall(p.IDENTIFIANT, p.expr_list)
+
+    @_('IDENTIFIANT "(" ")"')
+    def function_call(self, p):
+        return arbre_abstrait.FunctionCall(p.IDENTIFIANT, arbre_abstrait.ExprList())
+
+    @_('IDENTIFIANT "(" expr ")"')
+    def function_call(self, p):
+        return arbre_abstrait.FunctionCall(p.IDENTIFIANT, arbre_abstrait.ExprList([p.expr]))
+
+    @_('function_call ";"')
     def instruction(self, p):
-        return p[0]
+        return p.function_call
 
-    @_('LIRE "(" expr ")" ";"')
-    def lire(self, p):
-        return arbre_abstrait.Lire(p.IDENTIFIANT)
+    """
+    CONDITION
+    """
 
-    # === Function Call ===
-    @_('expr "," expr')
-    def expr(self, p):
-        return arbre_abstrait.FunctionArgument(p[0], p[2])
+    @_('SI "(" expr_list ")" "{" listeInstructions "}"',
+       'SI "(" expr_list ")" "{" listeInstructions "}" SINON "{" listeInstructions "}"')
+    def instruction(self, p):
+        return arbre_abstrait.Condition(p.expr_list, p.listeInstructions0, p.listeInstructions1)
 
-    @_('expr "(" expr ")"')
-    def expr(self, p):
-        print(p)
-        return arbre_abstrait.FunctionCall(p[0], p[2])
+    @_('expr')
+    def expr_list(self, p):
+        l = arbre_abstrait.ExprList()
+        l.append(p[0])
+        return l
 
-    # === Math operators ===
+    @_('expr "," expr_list')
+    def expr_list(self, p):
+        p[2].insert(0, p[0])
+        return p[2]
+
     @_('expr "+" expr')
     def expr(self, p):
         return arbre_abstrait.Operation('+', p[0], p[2])
-
-    @_('expr "-" expr')
-    def expr(self, p):
-        return arbre_abstrait.Operation('-', p[0], p[2])
 
     @_('expr "*" expr')
     def expr(self, p):
         return arbre_abstrait.Operation('*', p[0], p[2])
 
-    @_('expr "/" expr')
-    def expr(self, p):
-        return arbre_abstrait.Operation('/', p[0], p[2])
-
-    @_('expr "%" expr')
-    def expr(self, p):
-        return arbre_abstrait.Operation('%', p[0], p[2])
-
     @_('"(" expr ")"')
     def expr(self, p):
         return p.expr  # ou p[1]
 
-    @_('"-" expr')
+    @_('function_call')
     def expr(self, p):
-        return arbre_abstrait.Operation('-', arbre_abstrait.Entier(0), p[1])
+        return p.function_call
 
-    # === Affectation & Définitions ===
-    @_('TYPE IDENTIFIANT "=" expr ";"')
-    def instruction(self, p):
-        return arbre_abstrait.DefAndAffect(p.TYPE, p.IDENTIFIANT, p.expr)
-
-    @_('TYPE IDENTIFIANT ";"')
-    def instruction(self, p):
-        return arbre_abstrait.Définition(p.IDENTIFIANT)
-
-    @_('IDENTIFIANT "=" expr ";"')
-    def instruction(self, p):
-        return arbre_abstrait.Affectation(p.IDENTIFIANT, p.expr)
-
-    # === simple expr translate ===
     @_('ENTIER')
     def expr(self, p):
-        return arbre_abstrait.Entier(p.ENTIER)
+        return arbre_abstrait.Entier(p.ENTIER)  # p.ENTIER = p[0]
 
     @_('IDENTIFIANT')
     def expr(self, p):
-        return arbre_abstrait.Identifiant(p.IDENTIFIANT)
+        return arbre_abstrait.Variable(p.IDENTIFIANT)
 
 
 if __name__ == '__main__':

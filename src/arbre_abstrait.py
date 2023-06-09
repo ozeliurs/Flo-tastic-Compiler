@@ -74,7 +74,7 @@ class Variable:
         afficher("[Variable:" + str(self.nom) + "]", indent)
 
 
-class Affectation:
+class VariableAssignment:
     def __init__(self, var, exp=None):
         self.var = var
         self.exp = exp
@@ -99,13 +99,12 @@ class FunctionArgument:
 
 
 class FunctionCall:
-    def __init__(self, nom, args):
-        self.nom = nom
+    def __init__(self, function_name, args):
+        self.nom = function_name
         self.args = args
 
     def afficher(self, indent=0):
-        afficher("<functionCall>", indent)
-        self.nom.afficher(indent + 1)
+        afficher("<functionCall name=" + str(self.nom) + ">", indent)
         self.args.afficher(indent + 1)
         afficher("</functionCall>", indent)
 
@@ -133,15 +132,58 @@ class Type:
         afficher("[Type:" + str(self._type) + "]", indent)
 
 
-class Definition:
-    def __init__(self, type, nom, args=None):
+class VariableDefinition:
+    def __init__(self, type, name, args=None):
         self.type = type
-        self.nom = nom
+        self.name = name
         self.args = args
 
     def afficher(self, indent=0):
-        afficher("<définition>", indent)
-        print(self.type)
-        self.nom.afficher(indent + 1)
-        self.args.afficher(indent + 1)
-        afficher("</définition>", indent)
+        afficher("<VariableDefinition>", indent)
+        afficher(f"[Type:{self.type}, Name:{self.name}]", indent + 1)
+        afficher("</VariableDefinition>", indent)
+
+
+class VariableDefinitionAssignment:
+    def __init__(self, type, name, exp):
+        self.type = type
+        self.name = name
+        self.exp = exp
+
+    def afficher(self, indent=0):
+        afficher("<VariableDefinitionAssignment>", indent)
+        afficher(f"[Type:{self.type}, Name:{self.name}]", indent + 1)
+        afficher("<exp>", indent + 1)
+        self.exp.afficher(indent + 2)
+        afficher("</exp>", indent + 1)
+        afficher("</VariableDefinitionAssignment>", indent)
+
+
+class ExprList(list):
+    def afficher(self, indent=0):
+        afficher("<liste_expressions>", indent)
+        for expression in self:
+            expression.afficher(indent + 1)
+        afficher("</liste_expressions>", indent)
+
+
+class Boolean:
+    def __init__(self, value: bool):
+        self.value = value
+
+    def afficher(self, indent=0):
+        afficher("[Boolean:" + str(self.value) + "]", indent)
+
+
+class Condition:
+    def __init__(self, op, exp1, exp2):
+        self.exp1 = exp1
+        self.op = op
+        self.exp2 = exp2
+
+    def afficher(self, indent=0):
+        afficher("<condition>", indent)
+        afficher(self.op, indent + 1)
+        self.exp1.afficher(indent + 1)
+        self.exp2.afficher(indent + 1)
+        afficher("</condition>", indent)

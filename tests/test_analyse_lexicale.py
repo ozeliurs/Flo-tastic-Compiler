@@ -12,6 +12,9 @@ class TestFloLexer(TestCase):
     lexer: Lexer = FloLexer()
     TEST_FILES = [
         DATA_DIR / "input/exemple1.flo",
+        # DATA_DIR / "input/exemple2.flo",
+        # DATA_DIR / "input/variable.flo",
+        # DATA_DIR / "input/eval_lexicale.flo",
     ]
 
     def before_each(self):
@@ -19,16 +22,18 @@ class TestFloLexer(TestCase):
 
     def test_integer(self):
         tokens = self.lexer.tokenize('1')
-        self.assertTrue(list(tokens)[0]._type == 'ENTIER')
+        self.assertTrue(list(tokens)[0].type == 'ENTIER')
 
     def test_float(self):
         tokens = self.lexer.tokenize('1.0')
-        self.assertTrue(list(tokens)[0]._type == 'FLOAT')
+        self.assertTrue(list(tokens)[0].type == 'FLOAT')
 
     def test_files(self):
         for file in self.TEST_FILES:
-            with open(file, "r", encoding="utf8") as f:
-                tokens = self.lexer.tokenize(f.read())
-                for token in tokens:
-                    print(token)
-                self.assertTrue(len(list(tokens)) > 0)
+            # subtest
+            with self.subTest(file=file):
+                with open(file, "r", encoding="utf8") as f:
+                    tokens = list(self.lexer.tokenize(f.read()))
+                    for token in tokens:
+                        print(token)
+                    self.assertTrue(len(list(tokens)) > 0)
