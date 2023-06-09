@@ -8,7 +8,7 @@ class FloLexer(Lexer):
     tokens = {
         TYPE, IDENTIFIANT, ENTIER, ET, OU, NON, SI, SINONSI,
         SINON, TANTQUE, RETOURNER, EGAL, DIFFERENT, INFERIEUR_OU_EGAL,
-        SUPERIEUR_OU_EGAL, INFERIEUR, SUPERIEUR, VRAI, FAUX
+        SUPERIEUR_OU_EGAL, INFERIEUR, SUPERIEUR, VRAI, FAUX, BOOLEAN
     }
 
     # Les caractères litéraux sont des caractères uniques qui sont retournés tel quel quand rencontré par l'analyse lexicale.
@@ -18,18 +18,17 @@ class FloLexer(Lexer):
 
     # chaines contenant les caractère à ignorer. Ici espace et tabulation
     ignore = ' \t'
+
     @_(r'0|[1-9][0-9]*')
     def ENTIER(self, t):
         t.value = int(t.value)
         return t
-    @_(r'VRAI')
-    def VRAI(self, t):
-        t.value = True
+
+    @_(r'VRAI|FAUX')
+    def BOOLEAN(self, t):
+        t.value = bool(t.value)
         return t
-    @_(r'FAUX')
-    def FAUX(self, t):
-        t.value = False
-        return t
+
     # cas général
     IDENTIFIANT = r'[a-zA-Z][a-zA-Z0-9_]*'  # en général, variable ou nom de fonction
 
@@ -52,8 +51,6 @@ class FloLexer(Lexer):
     SUPERIEUR_OU_EGAL = r'>='
     INFERIEUR = r'<'
     SUPERIEUR = r'>'
-
-
 
     # Syntaxe des commentaires à ignorer
     ignore_comment = r'\#.*'

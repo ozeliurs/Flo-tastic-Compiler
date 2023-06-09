@@ -9,6 +9,7 @@ from analyse_lexicale import FloLexer
 class FloParser(Parser):
     # On récupère la liste des lexèmes de l'analyse lexicale
     tokens = FloLexer.tokens
+    debugfile = 'parser.out'
 
     # Règles gramaticales et actions associées
 
@@ -27,9 +28,13 @@ class FloParser(Parser):
         p[1].instructions.append(p[0])
         return p[1]
 
-    @_('variable_definition', 'variable_assignment', 'variable_definition_assignment', 'function_call')
+    @_('variable_definition', 'variable_assignment', 'variable_definition_assignment', 'function_call', 'condition')
     def instruction(self, p):
         return p[0]
+
+    @_('SI "(" expr ")" "{" listeInstructions "}"')  # TODO: fix not working
+    def condition(self, p):
+        return arbre_abstrait.Condition(p.expr_list, p.listeInstructions0, p.listeInstructions1)
 
     """
     VARIABLE
@@ -71,11 +76,6 @@ class FloParser(Parser):
     CONDITION
     """
 
-    @_('SI "(" expr_list ")" "{" listeInstructions "}"',
-       'SI "(" expr_list ")" "{" listeInstructions "}" SINON "{" listeInstructions "}"')
-    def instruction(self, p):
-        return arbre_abstrait.Condition(p.expr_list, p.listeInstructions0, p.listeInstructions1)
-
     @_('expr')
     def expr_list(self, p):
         l = arbre_abstrait.ExprList()
@@ -106,6 +106,10 @@ class FloParser(Parser):
     @_('ENTIER')
     def expr(self, p):
         return arbre_abstrait.Entier(p.ENTIER)  # p.ENTIER = p[0]
+
+    @_("BOOLEAN")
+    def expr(self, p):
+        return arbre_abstrait.Boolean(p.BOOLEAN)
 
     @_('IDENTIFIANT')
     def expr(self, p):

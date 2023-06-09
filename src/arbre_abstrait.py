@@ -52,8 +52,8 @@ class Operation:
 
     def afficher(self, indent=0):
         afficher("<operation>", indent)
-        afficher(self.op, indent + 1)
         self.exp1.afficher(indent + 1)
+        afficher(self.op, indent + 1)
         self.exp2.afficher(indent + 1)
         afficher("</operation>", indent)
 
