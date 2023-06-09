@@ -28,13 +28,13 @@ class FloParser(Parser):
         p[1].instructions.append(p[0])
         return p[1]
 
-    @_('variable_definition', 'variable_assignment', 'variable_definition_assignment', 'function_call', 'condition')
+    @_('variable_definition', 'variable_assignment', 'variable_definition_assignment', 'condition', 'function_call')
     def instruction(self, p):
         return p[0]
 
-    @_('SI "(" expr ")" "{" listeInstructions "}"')  # TODO: fix not working
+    @_('SI "(" expr ")" "{" listeInstructions "}"')
     def condition(self, p):
-        return arbre_abstrait.Condition(p.expr_list, p.listeInstructions0, p.listeInstructions1)
+        return arbre_abstrait.Condition(p.expr, p.listeInstructions, None)
 
     """
     VARIABLE
