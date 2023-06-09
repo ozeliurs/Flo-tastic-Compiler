@@ -24,7 +24,7 @@ class FloLexer(Lexer):
         t.value = int(t.value)
         return t
 
-    @_(r'VRAI|FAUX')
+    @_(r'Vrai|Faux')
     def BOOLEAN(self, t):
         t.value = bool(t.value)
         return t
@@ -44,15 +44,6 @@ class FloLexer(Lexer):
     IDENTIFIANT['tantque'] = TANTQUE
     IDENTIFIANT['retourner'] = RETOURNER
 
-    @_(r'0|[1-9][0-9]*')
-    def ENTIER(self, t):
-        t.value = int(t.value)
-        return t
-
-    @_(r'VRAI|FAUX')
-    def BOOLEAN(self, t):
-        t.value = bool(t.value)
-        return t
     # Expressions régulières correspondant au différents Lexèmes par ordre de priorité
     EGAL = r'=='
     DIFFERENT = r'!='

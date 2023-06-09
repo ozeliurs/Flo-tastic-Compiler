@@ -12,7 +12,7 @@ class TestFloParser(TestCase):
     lexer: Lexer = FloLexer()
     parser: Parser = FloParser()
     TEST_FILES = [
-        DATA_DIR / "input/variable.flo",
+        DATA_DIR / "input/eval_lexicale.flo",
     ]
 
     def before_each(self):

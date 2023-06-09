@@ -3,6 +3,8 @@ Affiche une chaine de caractère avec une certaine identation
 """
 from enum import Enum
 
+variable_dict: dict[str, str] = {}
+
 
 class TypeEnum(Enum):
     ENTIER = 'entier'
@@ -77,10 +79,10 @@ class Operation:
         self.exp1 = exp1
         self.op = OperationEnum(op)
         self.exp2 = exp2
-        if self.op == OperationEnum.DIVIDE and self.exp2.valeur == 0:
-            raise Exception("ZeroDivisionError")
-        if self.op == OperationEnum.MODULO and self.exp2.valeur == 0:
-            raise Exception("ZeroDivisionError")
+        # if self.op == OperationEnum.DIVIDE and self.exp2.valeur == 0:
+        #     raise Exception("ZeroDivisionError")
+        # if self.op == OperationEnum.MODULO and self.exp2.valeur == 0:
+        #     raise Exception("ZeroDivisionError")
         if self.exp1.type != self.exp2.type:
             raise Exception(f"Type mismatch: {self.exp1.type} and {self.exp2.type}")
         self.type = self.exp1.type
@@ -99,10 +101,9 @@ class Entier:
         self.type = TypeEnum.ENTIER
 
     def afficher(self, indent=0):
-        afficher("[Entier:" + str(self.valeur) + "]", indent)
-
-
-variable_dict: dict[str, str] = {}
+        afficher("<entier>", indent)
+        afficher(str(self.valeur), indent + 1)
+        afficher("</entier>", indent)
 
 
 class VariableRead:
@@ -113,7 +114,9 @@ class VariableRead:
         self.type = variable_dict[self.nom]
 
     def afficher(self, indent=0):
-        afficher("[VariableRead:" + str(self.nom) + "]", indent)
+        afficher("<variable_read>", indent)
+        afficher(self.nom, indent + 1)
+        afficher("</variable_read>", indent)
 
 
 class VariableAssignment:
@@ -128,7 +131,7 @@ class VariableAssignment:
 
     def afficher(self, indent=0):
         afficher("<affectation>", indent)
-        afficher(self.var, indent + 1)
+        afficher(f"<variable>{self.var}</variable>", indent + 1)
         self.exp.afficher(indent + 1)
         afficher("</affectation>", indent)
 
@@ -142,7 +145,8 @@ class VariableDefinition:
 
     def afficher(self, indent=0):
         afficher("<VariableDefinition>", indent)
-        afficher(f"[Type:{self.type}, Name:{self.name}]", indent + 1)
+        afficher(f"<Type>{self.type}</Type>", indent + 1)
+        afficher(f"<Name>{self.name}</Name>", indent + 1)
         afficher("</VariableDefinition>", indent)
 
 
@@ -157,42 +161,24 @@ class VariableDefinitionAssignment:
 
     def afficher(self, indent=0):
         afficher("<VariableDefinitionAssignment>", indent)
-        afficher(f"[Type:{self.type}, Name:{self.name}]", indent + 1)
+        afficher(f"<Type>{self.type}</Type>", indent + 1)
         afficher("<exp>", indent + 1)
         self.exp.afficher(indent + 2)
         afficher("</exp>", indent + 1)
         afficher("</VariableDefinitionAssignment>", indent)
 
 
-class FunctionArgument:
-    def __init__(self, left, right):
-        self.left = left
-        self.right = right
-
-    def afficher(self, indent=0):
-        afficher("<functionArgument>", indent)
-        self.left.afficher(indent + 1)
-        self.right.afficher(indent + 1)
-        afficher("</functionArgument>", indent)
-
-
 class FunctionCall:
     def __init__(self, function_name, args):
         self.nom = function_name
         self.args = args
+        self.type = TypeEnum.ENTIER
 
     def afficher(self, indent=0):
-        afficher("<functionCall name=" + str(self.nom) + ">", indent)
+        afficher("<functionCall>", indent)
+        afficher(f"<functionName>{self.nom}</functionName>", indent + 1)
         self.args.afficher(indent + 1)
         afficher("</functionCall>", indent)
-
-
-class Identifiant:
-    def __init__(self, nom):
-        self.nom = nom
-
-    def afficher(self, indent=0):
-        afficher("[Identifiant:" + str(self.nom) + "]", indent)
 
 
 class ExprList(list):
@@ -209,7 +195,9 @@ class Boolean:
         self.type = TypeEnum.BOOL
 
     def afficher(self, indent=0):
-        afficher("[Boolean:" + str(self.value) + "]", indent)
+        afficher("<boolean>", indent)
+        afficher(str(self.value), indent + 1)
+        afficher("</boolean>", indent)
 
 
 class Condition:
@@ -224,3 +212,50 @@ class Condition:
         self.exp1.afficher(indent + 1)
         # self.exp2.afficher(indent + 1)
         afficher("</condition>", indent)
+
+
+class Parameter:
+    def __init__(self, type, name):
+        self.type = type
+        self.name = name
+        variable_dict[self.name] = self.type
+
+    def afficher(self, indent=0):
+        afficher("<parameter>", indent)
+        afficher(f"<Type>{self.type}</Type>", indent + 1)
+        afficher(f"<Name>{self.name}</Name>", indent + 1)
+        afficher("</parameter>", indent)
+
+
+class ParameterList(list):
+    def afficher(self, indent=0):
+        afficher("<liste_parametres>", indent)
+        for parameter in self:
+            parameter.afficher(indent + 1)
+        afficher("</liste_parametres>", indent)
+
+
+class FunctionDefinition:
+    def __init__(self, type, name, args, body):
+        self.type = type
+        self.name = name
+        self.args = args
+        self.body = body
+
+    def afficher(self, indent=0):
+        afficher("<functionDefinition>", indent)
+        afficher(f"<Type>{self.type}</Type>", indent + 1)
+        afficher(f"<Name>{self.name}</Name>", indent + 1)
+        self.args.afficher(indent + 1)
+        self.body.afficher(indent + 1)
+        afficher("</functionDefinition>", indent)
+
+
+class ReturnStatement:
+    def __init__(self, exp):
+        self.exp = exp
+
+    def afficher(self, indent=0):
+        afficher("<returnStatement>", indent)
+        self.exp.afficher(indent + 1)
+        afficher("</returnStatement>", indent)

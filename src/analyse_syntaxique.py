@@ -32,9 +32,19 @@ class FloParser(Parser):
     def instruction(self, p):
         return p[0]
 
-    @_('SI "(" expr ")" "{" listeInstructions "}"')
+    @_('SI "(" expr ")" "{" listeInstructions "}"',
+       'SI "(" expr ")" "{" listeInstructions "}" SINON "{" listeInstructions "}"'
+       )
     def condition(self, p):
         return arbre_abstrait.Condition(p.expr, p.listeInstructions, None)
+
+    @_('elif_list SINON SI "(" expr ")" "{" listeInstructions "}"')
+    def elif_list(self, p):
+        return arbre_abstrait.Condition(p[4], p[7], p[0], None)
+
+    @_('SINON SI "(" expr ")" "{" listeInstructions "}"')
+    def elif_list(self, p):
+        return arbre_abstrait.Condition(p[3], p[6], None, None)
 
     """
     VARIABLE
@@ -72,9 +82,32 @@ class FloParser(Parser):
     def instruction(self, p):
         return p.function_call
 
-    """
-    CONDITION
-    """
+    @_('TYPE IDENTIFIANT "(" parameter_list ")" "{" listeInstructions "}"')
+    def function_definition(self, p):
+        return arbre_abstrait.FunctionDefinition(p.TYPE, p.IDENTIFIANT, p.parameter_list, p.listeInstructions)
+
+    @_('TYPE IDENTIFIANT')
+    def parameter(self, p):
+        return arbre_abstrait.Parameter(p[0], p.IDENTIFIANT)
+
+    @_('parameter')
+    def parameter_list(self, p):
+        l = arbre_abstrait.ParameterList()
+        l.append(p[0])
+        return l
+
+    @_('parameter "," parameter_list')
+    def parameter_list(self, p):
+        p[2].insert(0, p[0])
+        return p[2]
+
+    @_("RETOURNER expr")
+    def return_statement(self, p):
+        return arbre_abstrait.ReturnStatement(p.expr)
+
+    @_('return_statement ";"')
+    def instruction(self, p):
+        return p.return_statement
 
     @_('expr')
     def expr_list(self, p):
@@ -97,7 +130,10 @@ class FloParser(Parser):
        'expr INFERIEUR_OU_EGAL expr',
        'expr SUPERIEUR_OU_EGAL expr',
        'expr EGAL expr',
-       'expr DIFFERENT expr',)
+       'expr DIFFERENT expr',
+       'expr ET expr',
+       'expr OU expr'
+       )
     def expr(self, p):
         return arbre_abstrait.Operation(p[1], p[0], p[2])
 
