@@ -223,16 +223,25 @@ class Boolean:
 
 
 class Condition:
-    def __init__(self, op, exp1, exp2):
-        self.exp1 = exp1
-        self.op = op
-        self.exp2 = exp2
+    def __init__(self, expr, scope1, scope2):
+        self.expr = expr
+        self.scope1 = scope1
+        self.scope2 = scope2
 
     def afficher(self, indent=0):
         afficher("<condition>", indent)
-        self.op.afficher(indent + 1)
-        self.exp1.afficher(indent + 1)
-        # self.exp2.afficher(indent + 1)
+        afficher("<expression>", indent + 1)
+        self.expr.afficher(indent + 2)
+        afficher("</expression>", indent + 1)
+
+        if self.scope1:
+            afficher("<scope1>", indent + 1)
+            self.scope1.afficher(indent + 2)
+            afficher("</scope1>", indent + 1)
+        if self.scope2:
+            afficher("<scope2>", indent + 1)
+            self.scope2.afficher(indent + 2)
+            afficher("</scope2>", indent + 1)
         afficher("</condition>", indent)
 
 

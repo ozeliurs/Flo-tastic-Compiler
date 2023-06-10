@@ -11,6 +11,16 @@ class FloParser(Parser):
     tokens = FloLexer.tokens
     debugfile = 'parser.out'
 
+    precedence = (
+        ('left', 'ET'),
+        ('left', 'OU'),
+        ('right', 'NON'),
+        ('right', 'EGAL'),
+        ('left', 'INFERIEUR', 'SUPERIEUR', 'INFERIEUR_OU_EGAL', 'SUPERIEUR_OU_EGAL', 'DIFFERENT'),
+        ('left', '+', '-'),
+        ('left', '*', '/', '%'),
+    )
+
     # Règles gramaticales et actions associées
 
     @_('listeInstructions')
@@ -47,15 +57,26 @@ class FloParser(Parser):
        'SI "(" expr ")" scope SINON scope'
        )
     def condition(self, p):
-        return arbre_abstrait.Condition(p.expr, p.scope, None)
+        if len(p) == 4:
+            return arbre_abstrait.Condition(p[2], p[3], None)
+        else:
+            return arbre_abstrait.Condition(p[2], p[3], p[4])
 
-    @_('elif_list SINON SI "(" expr ")" scope')
-    def elif_list(self, p):
-        return arbre_abstrait.Condition(p[4], p[7], p[0], None)
+    @_('SI "(" expr ")" scope elif_list')
+    def condition(self, p):
+        return arbre_abstrait.Condition(p.expr, p.scope, p.elif_list)
 
     @_('SINON SI "(" expr ")" scope')
     def elif_list(self, p):
-        return arbre_abstrait.Condition(p[3], p[6], None, None)
+        return arbre_abstrait.Condition(p.expr, p.scope, None)
+
+    @_('SINON SI "(" expr ")" scope elif_list')
+    def elif_list(self, p):
+        return arbre_abstrait.Condition(p.expr, p.scope, p.elif_list)
+
+    @_("SINON scope")
+    def elif_list(self, p):
+        return p.scope
 
     """
     VARIABLE

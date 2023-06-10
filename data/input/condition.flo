@@ -1,5 +1,9 @@
-si (1==(1 > 1)){
-   entier a;
+si (1){
+   a();
 }
-
-a = 1;
+sinon si (1){
+   b();
+}
+sinon {
+   c();
+}
