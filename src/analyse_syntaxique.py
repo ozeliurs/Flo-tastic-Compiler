@@ -32,17 +32,28 @@ class FloParser(Parser):
     def instruction(self, p):
         return p[0]
 
-    @_('SI "(" expr ")" "{" listeInstructions "}"',
-       'SI "(" expr ")" "{" listeInstructions "}" SINON "{" listeInstructions "}"'
+    @_('"{" new_scope listeInstructions "}"')
+    def scope(self, p):
+        instructions = p.listeInstructions
+        arbre_abstrait.pop_scope()
+        return instructions
+
+    @_('')
+    def new_scope(self, p):
+        arbre_abstrait.create_scope()
+        return
+
+    @_('SI "(" expr ")" scope',
+       'SI "(" expr ")" scope SINON scope'
        )
     def condition(self, p):
-        return arbre_abstrait.Condition(p.expr, p.listeInstructions, None)
+        return arbre_abstrait.Condition(p.expr, p.scope, None)
 
-    @_('elif_list SINON SI "(" expr ")" "{" listeInstructions "}"')
+    @_('elif_list SINON SI "(" expr ")" scope')
     def elif_list(self, p):
         return arbre_abstrait.Condition(p[4], p[7], p[0], None)
 
-    @_('SINON SI "(" expr ")" "{" listeInstructions "}"')
+    @_('SINON SI "(" expr ")" scope')
     def elif_list(self, p):
         return arbre_abstrait.Condition(p[3], p[6], None, None)
 
@@ -82,7 +93,7 @@ class FloParser(Parser):
     def instruction(self, p):
         return p.function_call
 
-    @_('TYPE IDENTIFIANT "(" parameter_list ")" "{" listeInstructions "}"')
+    @_('TYPE IDENTIFIANT "(" parameter_list ")" scope')
     def function_definition(self, p):
         return arbre_abstrait.FunctionDefinition(p.TYPE, p.IDENTIFIANT, p.parameter_list, p.listeInstructions)
 

@@ -3,7 +3,33 @@ Affiche une chaine de caractère avec une certaine identation
 """
 from enum import Enum
 
-variable_dict: dict[str, str] = {}
+stack = []
+
+
+def create_scope():
+    stack.append({
+        'variables': {}
+    })
+
+
+create_scope()
+
+
+def pop_scope():
+    if len(stack) == 1:
+        return
+    stack.pop()
+
+
+def get_variable(name):
+    for scope in reversed(stack):
+        if name in scope['variables']:
+            return scope['variables'][name]
+    raise Exception(f"Variable {name} not found")
+
+
+def get_current_scope():
+    return stack[-1]
 
 
 class TypeEnum(Enum):
@@ -109,9 +135,7 @@ class Entier:
 class VariableRead:
     def __init__(self, nom):
         self.nom = nom
-        if self.nom not in variable_dict:
-            raise Exception("Undefined variable " + self.nom)
-        self.type = variable_dict[self.nom]
+        self.type = get_variable(self.nom)
 
     def afficher(self, indent=0):
         afficher("<variable_read>", indent)
@@ -123,9 +147,7 @@ class VariableAssignment:
     def __init__(self, var, exp):
         self.var = var
         self.exp = exp
-        if self.var not in variable_dict:
-            raise Exception("Undefined variable " + self.var)
-        self.type = variable_dict[self.var]
+        self.type = get_variable(self.var)
         if self.type != self.exp.type:
             raise Exception(f"Type mismatch: {self.type} and {self.exp.type}")
 
@@ -141,7 +163,7 @@ class VariableDefinition:
         self.type = type
         self.name = name
         self.args = args
-        variable_dict[self.name] = self.type
+        get_current_scope()['variables'][self.name] = self.type
 
     def afficher(self, indent=0):
         afficher("<VariableDefinition>", indent)
@@ -155,7 +177,7 @@ class VariableDefinitionAssignment:
         self.type = type
         self.name = name
         self.exp = exp
-        variable_dict[self.name] = self.type
+        get_current_scope()['variables'][self.name] = self.type
         if self.type != self.exp.type:
             raise Exception(f"Type mismatch: {self.type} and {self.exp.type}")
 
@@ -218,7 +240,7 @@ class Parameter:
     def __init__(self, type, name):
         self.type = type
         self.name = name
-        variable_dict[self.name] = self.type
+        get_current_scope()['variables'][self.name] = self.type
 
     def afficher(self, indent=0):
         afficher("<parameter>", indent)
