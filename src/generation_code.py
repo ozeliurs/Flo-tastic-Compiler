@@ -102,9 +102,18 @@ Affiche le code nasm correspondant à une instruction
 """
 
 
+def gen_lire(instruction: arbre_abstrait.FunctionCall):
+    nasm_instruction("mov", "eax", "sinput", "", "")
+    nasm_instruction("call", "readline", "", "", "")
+    nasm_instruction("call", "atoi", "", "", "")
+    nasm_instruction("push", "eax", "", "", "")
+
+
 def gen_instruction(instruction):
-    if type(instruction) == arbre_abstrait.Ecrire:
+    if type(instruction) == arbre_abstrait.FunctionCall and instruction.function_name == "ecrire":
         gen_ecrire(instruction)
+    elif type(instruction) == arbre_abstrait.FunctionCall and instruction.function_name == "lire":
+        gen_lire(instruction)
     else:
         print("_type instruction inconnu", type(instruction))
         exit(0)
@@ -115,8 +124,8 @@ Affiche le code nasm correspondant au fait d'envoyer la valeur entière d'une ex
 """
 
 
-def gen_ecrire(ecrire):
-    gen_expression(ecrire.exp)  # on calcule et empile la valeur d'expression
+def gen_ecrire(ecrire: arbre_abstrait.FunctionCall):
+    gen_expression(ecrire.args[0])  # on calcule et empile la valeur d'expression
     nasm_instruction("pop", "eax", "", "", "")  # on dépile la valeur d'expression sur eax
     nasm_instruction("call", "iprintLF", "", "", "")  # on envoie la valeur d'eax sur la sortie standard
 
@@ -130,7 +139,7 @@ def gen_expression(expression):
     if type(expression) == arbre_abstrait.Operation:
         gen_operation(expression)  # on calcule et empile la valeur de l'opération
     elif type(expression) == arbre_abstrait.Entier:
-        nasm_instruction("push", str(expression.valeur), "", "", "");  # on met sur la pile la valeur entière
+        nasm_instruction("push", str(expression.valeur), "", "", "")  # on met sur la pile la valeur entière
     else:
         print("_type d'expression inconnu", type(expression))
         exit(0)
@@ -157,7 +166,7 @@ def gen_operation(operation):
                          "effectue l'opération eax" + op + "ebx et met le résultat dans eax")
     if op == '*':
         nasm_instruction(code[op], "ebx", "", "", "effectue l'opération eax" + op + "ebx et met le résultat dans eax")
-    nasm_instruction("push", "eax", "", "", "empile le résultat");
+    nasm_instruction("push", "eax", "", "", "empile le résultat")
 
 
 if __name__ == "__main__":

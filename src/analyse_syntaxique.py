@@ -39,7 +39,7 @@ class FloParser(Parser):
         return p[1]
 
     @_('variable_definition', 'variable_assignment', 'variable_definition_assignment', 'condition', 'function_call',
-       'function_definition', 'return_statement')
+       'function_definition', 'return_statement', 'while_loop')
     def instruction(self, p):
         return p[0]
 
@@ -59,9 +59,9 @@ class FloParser(Parser):
        )
     def condition(self, p):
         if len(p) == 4:
-            return arbre_abstrait.Condition(p[2], p[3], None)
+            return arbre_abstrait.Condition(p.expr, p.scope, None)
         else:
-            return arbre_abstrait.Condition(p[2], p[3], p[4])
+            return arbre_abstrait.Condition(p.expr, p.scope, p[-1])
 
     @_('SI "(" expr ")" scope elif_list')
     def condition(self, p):
@@ -78,6 +78,10 @@ class FloParser(Parser):
     @_("SINON scope")
     def elif_list(self, p):
         return p.scope
+
+    @_('TANTQUE "(" expr ")" scope')
+    def while_loop(self, p):
+        return arbre_abstrait.WhileLoop(p.expr, p.scope)
 
     """
     VARIABLE

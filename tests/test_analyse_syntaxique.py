@@ -29,6 +29,5 @@ class TestFloParser(TestCase):
             with open(file, "r", encoding="utf8") as f:
                 data = f.read()
                 tokens = self.lexer.tokenize(data)
-                pprint.pprint(list(self.lexer.tokenize(data)))
                 tree = self.parser.parse(tokens)
                 tree.afficher()

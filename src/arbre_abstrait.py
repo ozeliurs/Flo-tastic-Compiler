@@ -22,7 +22,6 @@ def pop_scope():
 
 
 def get_variable(name):
-    print(stack)
     for scope in reversed(stack):
         if name in scope['variables']:
             return scope['variables'][name]
@@ -85,21 +84,6 @@ class ListeInstructions:
         for instruction in self.instructions:
             instruction.afficher(indent + 1)
         afficher("</liste_instructions>", indent)
-
-
-class Ecrire:
-    def __init__(self, exp):
-        self.exp = exp
-
-    def afficher(self, indent=0):
-        afficher("<ecrire>", indent)
-        self.exp.afficher(indent + 1)
-        afficher("</ecrire>", indent)
-
-
-class Lire:
-    def afficher(self, indent=0):
-        afficher("</lire>", indent)
 
 
 class Operation:
@@ -196,25 +180,25 @@ class VariableDefinitionAssignment:
         afficher("</VariableDefinitionAssignment>", indent)
 
 
-class FunctionCall:
-    def __init__(self, function_name, args):
-        self.nom = function_name
-        self.args = args
-        self.type = TypeEnum.ENTIER
-
-    def afficher(self, indent=0):
-        afficher("<functionCall>", indent)
-        afficher(f"<functionName>{self.nom}</functionName>", indent + 1)
-        self.args.afficher(indent + 1)
-        afficher("</functionCall>", indent)
-
-
 class ExprList(list):
     def afficher(self, indent=0):
         afficher("<liste_expressions>", indent)
         for expression in self:
             expression.afficher(indent + 1)
         afficher("</liste_expressions>", indent)
+
+
+class FunctionCall:
+    def __init__(self, function_name: str, args: ExprList):
+        self.function_name = function_name
+        self.args = args
+        self.type = TypeEnum.ENTIER
+
+    def afficher(self, indent=0):
+        afficher("<functionCall>", indent)
+        afficher(f"<functionName>{self.function_name}</functionName>", indent + 1)
+        self.args.afficher(indent + 1)
+        afficher("</functionCall>", indent)
 
 
 class Boolean:
@@ -255,7 +239,6 @@ class Parameter:
     def __init__(self, type, name):
         self.type = type
         self.name = name
-        print(f"Adding {self.name} to {get_current_scope()['variables']}")
         get_current_scope()['variables'][self.name] = self.type
 
     def afficher(self, indent=0):
@@ -297,3 +280,19 @@ class ReturnStatement:
         afficher("<returnStatement>", indent)
         self.exp.afficher(indent + 1)
         afficher("</returnStatement>", indent)
+
+
+class WhileLoop:
+    def __init__(self, expr, scope):
+        self.expr = expr
+        self.scope = scope
+
+    def afficher(self, indent=0):
+        afficher("<whileLoop>", indent)
+        afficher("<expression>", indent + 1)
+        self.expr.afficher(indent + 2)
+        afficher("</expression>", indent + 1)
+        afficher("<scope>", indent + 1)
+        self.scope.afficher(indent + 2)
+        afficher("</scope>", indent + 1)
+        afficher("</whileLoop>", indent)
