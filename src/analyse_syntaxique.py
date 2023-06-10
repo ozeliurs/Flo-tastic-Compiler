@@ -38,7 +38,8 @@ class FloParser(Parser):
         p[1].instructions.append(p[0])
         return p[1]
 
-    @_('variable_definition', 'variable_assignment', 'variable_definition_assignment', 'condition', 'function_call')
+    @_('variable_definition', 'variable_assignment', 'variable_definition_assignment', 'condition', 'function_call',
+       'function_definition', 'return_statement')
     def instruction(self, p):
         return p[0]
 
@@ -116,7 +117,9 @@ class FloParser(Parser):
 
     @_('TYPE IDENTIFIANT "(" parameter_list ")" scope')
     def function_definition(self, p):
-        return arbre_abstrait.FunctionDefinition(p.TYPE, p.IDENTIFIANT, p.parameter_list, p.listeInstructions)
+        func = arbre_abstrait.FunctionDefinition(p.TYPE, p.IDENTIFIANT, p.parameter_list, p.scope)
+        arbre_abstrait.pop_scope()
+        return func
 
     @_('TYPE IDENTIFIANT')
     def parameter(self, p):
@@ -164,10 +167,14 @@ class FloParser(Parser):
        'expr EGAL expr',
        'expr DIFFERENT expr',
        'expr ET expr',
-       'expr OU expr'
+       'expr OU expr',
+       'NON expr'
        )
     def expr(self, p):
-        return arbre_abstrait.Operation(p[1], p[0], p[2])
+        if len(p) == 3:
+            return arbre_abstrait.Operation(p[1], p[0], p[2])
+        else:
+            return arbre_abstrait.Operation(p[0], p[1], None)
 
     @_('"(" expr ")"')
     def expr(self, p):

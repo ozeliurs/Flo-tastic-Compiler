@@ -22,10 +22,11 @@ def pop_scope():
 
 
 def get_variable(name):
+    print(stack)
     for scope in reversed(stack):
         if name in scope['variables']:
             return scope['variables'][name]
-    raise Exception(f"Variable {name} not found")
+    # raise Exception(f"Variable {name} not found")
 
 
 def get_current_scope():
@@ -58,6 +59,7 @@ class OperationEnum(Enum):
     MULTIPLY = "*"
     DIVIDE = "/"
     MODULO = "%"
+    NOT = "non"
 
 
 def afficher(s, indent=0):
@@ -109,7 +111,10 @@ class Operation:
         #     raise Exception("ZeroDivisionError")
         # if self.op == OperationEnum.MODULO and self.exp2.valeur == 0:
         #     raise Exception("ZeroDivisionError")
-        if self.exp1.type != self.exp2.type:
+
+        if self.op == OperationEnum.NOT:
+            self.type = TypeEnum.BOOL
+        elif self.exp1.type != self.exp2.type:
             raise Exception(f"Type mismatch: {self.exp1.type} and {self.exp2.type}")
         self.type = self.exp1.type
 
@@ -117,7 +122,8 @@ class Operation:
         afficher("<operation>", indent)
         self.exp1.afficher(indent + 1)
         afficher(str(self.op), indent + 1)
-        self.exp2.afficher(indent + 1)
+        if self.exp2:
+            self.exp2.afficher(indent + 1)
         afficher("</operation>", indent)
 
 
@@ -249,6 +255,7 @@ class Parameter:
     def __init__(self, type, name):
         self.type = type
         self.name = name
+        print(f"Adding {self.name} to {get_current_scope()['variables']}")
         get_current_scope()['variables'][self.name] = self.type
 
     def afficher(self, indent=0):
