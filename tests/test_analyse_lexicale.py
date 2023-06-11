@@ -2,10 +2,9 @@ from pathlib import Path
 from unittest import TestCase
 
 from sly import Lexer
+from analyse_lexicale import FloLexer
 
-from src.analyse_lexicale import FloLexer
-
-DATA_DIR = Path(__file__).parent.parent / "data"
+DATA_DIR = Path(__file__).parent
 
 
 class TestFloLexer(TestCase):
