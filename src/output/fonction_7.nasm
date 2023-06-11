@@ -4,32 +4,62 @@ sinput:	resb	255	;reserve a 255 byte space in memory for the users input string
 v$a:	resd	1
 section	.text
 global _start
+		 ; ===== Generating function declarations =====
+		 ; ===== Generating function f =====
 _f:
+		 ; ===== Initialising function f =====
 	push	ebp		
 	mov	ebp,	esp	
-	sub	esp,	0	
+		 ; ===== Storing arguments of function f =====
+		 ; ===== Storing argument e =====
+		 ; ===== Stored argument e at offset +8 =====
+		 ; ===== Allocating local variables of function f =====
+		 ; ===== Found 0 local variables in function f =====
+	sub	esp,	0			 ; Substracting space for local variables from esp (0)
+		 ; ===== Generating instructions of function f =====
+		 ; ===== Generating variable assignment Parameter(entier, e) =====
+		 ; ===== Generating expression Entier(7) =====
 	push	7		
-	pop	eax		
-	mov	[ebp+8],	eax	
-	mov	eax,	[ebp+8]			 ; read <arbre_abstrait.Parameter object at 0x7fb2c98f4910>
-	push	eax				 ; push <arbre_abstrait.Parameter object at 0x7fb2c98f4910>
+		 ; ===== Finished generating expression Entier(7) =====
+	pop	eax				 ; pop value from stack
+	mov	[ebp+8],	eax			 ; assign value to variable
+		 ; ===== Finished generating variable assignment Parameter(entier, e) =====
+		 ; ===== Generating expression VariableRead(e, entier) =====
+		 ; ===== Generating variable read Parameter(entier, e) =====
+	mov	eax,	[ebp+8]			 ; read Parameter(entier, e)
+	push	eax				 ; push Parameter(entier, e) on stack
+		 ; ===== Finished generating variable read Parameter(entier, e) =====
+		 ; ===== Finished generating expression VariableRead(e, entier) =====
 	pop	eax		
 	call	iprintLF		
+		 ; ===== Generating return statement =====
+		 ; ===== Generating expression Entier(5) =====
 	push	5		
-	pop	eax		
-	leave			
-	ret			
-	leave			
-	ret			
+		 ; ===== Finished generating expression Entier(5) =====
+	pop	eax				 ; Pop return value from stack
+	leave					 ; Clean up stack
+	ret					 ; Return to caller
+		 ; ===== Finished generating return statement =====
+		 ; ===== Finished generating instructions of function f =====
+		 ; ===== Cleaning up function f =====
+	leave					 ; Clean up stack
+	ret					 ; Return to caller
+		 ; ===== Finished cleaning up function f =====
+		 ; ===== Finished generating function f =====
+		 ; ===== End of function declarations =====
+		 ; ===== Generating main function =====
 main:
 	push	ebp		
 	mov	ebp,	esp	
 	sub	esp,	0	
+		 ; ===== Generating expression Entier(5) =====
 	push	5		
+		 ; ===== Finished generating expression Entier(5) =====
 	call	_f		
 	push	eax		
 	leave			
 	ret			
+		 ; ===== End of main function =====
 _start:
 	call	main		
 	mov	eax,	1			 ; 1 est le code de SYS_EXIT

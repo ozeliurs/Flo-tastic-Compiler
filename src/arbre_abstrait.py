@@ -41,6 +41,9 @@ class ListeInstructions:
         self.instructions.append(other)
         return self
 
+    def __str__(self):
+        return f"ListeInstructions({self.instructions})"
+
 
 class Parameter:
     def __init__(self, type, name, skip=False):
@@ -54,6 +57,9 @@ class Parameter:
         afficher(f"<Type>{self.type}</Type>", indent + 1)
         afficher(f"<Name>{self.name}</Name>", indent + 1)
         afficher("</parameter>", indent)
+
+    def __str__(self):
+        return f"Parameter({self.type}, {self.name})"
 
 
 class ParameterList(list):
@@ -89,6 +95,9 @@ class FunctionDeclaration:
         self.scope.afficher(indent + 1)
         afficher("</functionDefinition>", indent)
 
+    def __str__(self):
+        return f"FunctionDeclaration({self.type}, {self.name}, {self.args})"
+
 
 class ReturnStatement:
     def __init__(self, exp):
@@ -100,6 +109,9 @@ class ReturnStatement:
         afficher("<returnStatement>", indent)
         self.exp.afficher(indent + 1)
         afficher("</returnStatement>", indent)
+
+    def __str__(self):
+        return f"ReturnStatement({self.exp})"
 
 
 class TypeEnum(Enum):
@@ -207,7 +219,8 @@ class Operation:
 
         if TYPE_CHECKING:
             if self.op in [OperationEnum.NOT, OperationEnum.AND, OperationEnum.OR, OperationEnum.GREATER_THAN,
-                           OperationEnum.LESS_THAN, OperationEnum.GREATER_THAN_OR_EQUAL, OperationEnum.LESS_THAN_OR_EQUAL,
+                           OperationEnum.LESS_THAN, OperationEnum.GREATER_THAN_OR_EQUAL,
+                           OperationEnum.LESS_THAN_OR_EQUAL,
                            OperationEnum.EQUALITY, OperationEnum.INEQUALITY]:
                 self.type = TypeEnum.BOOL
             else:
@@ -229,6 +242,9 @@ class Operation:
             self.exp2.afficher(indent + 1)
         afficher("</operation>", indent)
 
+    def __str__(self):
+        return f"Operation({self.exp1}, {self.op}, {self.exp2})"
+
 
 class Entier:
     def __init__(self, valeur: int):
@@ -239,6 +255,9 @@ class Entier:
         afficher("<entier>", indent)
         afficher(str(self.valeur), indent + 1)
         afficher("</entier>", indent)
+
+    def __str__(self):
+        return f"Entier({self.valeur})"
 
 
 class VariableRead:
@@ -252,6 +271,9 @@ class VariableRead:
         afficher("<variable_read>", indent)
         afficher(self.nom, indent + 1)
         afficher("</variable_read>", indent)
+
+    def __str__(self):
+        return f"VariableRead({self.nom}, {self.type})"
 
 
 class VariableAssignment:
@@ -270,6 +292,9 @@ class VariableAssignment:
         self.exp.afficher(indent + 1)
         afficher("</affectation>", indent)
 
+    def __str__(self):
+        return f"VariableAssignment({self.var}, {self.exp}, {self.type}, {self.definition})"
+
 
 class VariableDefinition:
     def __init__(self, type, name, args=None):
@@ -286,6 +311,9 @@ class VariableDefinition:
         afficher(f"<Type>{self.type}</Type>", indent + 1)
         afficher(f"<Name>{self.name}</Name>", indent + 1)
         afficher("</VariableDefinition>", indent)
+
+    def __str__(self):
+        return f"VariableDefinition({self.type}, {self.name}, {self.args})"
 
 
 class VariableDefinitionAssignment:
@@ -308,6 +336,9 @@ class VariableDefinitionAssignment:
         self.exp.afficher(indent + 2)
         afficher("</exp>", indent + 1)
         afficher("</VariableDefinitionAssignment>", indent)
+
+    def __str__(self):
+        return f"VariableDefinitionAssignment({self.type}, {self.name}, {self.exp}, {self.offset})"
 
 
 class ExprList(list):
@@ -339,6 +370,9 @@ class FunctionCall:
         self.args.afficher(indent + 1)
         afficher("</functionCall>", indent)
 
+    def __str__(self):
+        return f"FunctionCall({self.function_name}, {self.args}, {self.type}, {self.function})"
+
 
 class Boolean:
     def __init__(self, value: bool):
@@ -349,6 +383,9 @@ class Boolean:
         afficher("<boolean>", indent)
         afficher(str(self.value), indent + 1)
         afficher("</boolean>", indent)
+
+    def __str__(self):
+        return f"Boolean({self.value})"
 
 
 class Condition:
@@ -383,11 +420,14 @@ class Condition:
             afficher("</scope2>", indent + 1)
         afficher("</condition>", indent)
 
+    def __str__(self):
+        return f"Condition({self.expr}, {self.scope1}, {self.scope2})"
+
 
 class WhileLoop:
     def __init__(self, expr, scope):
         self.expr = expr
-        if TYPE_CHECKING and self.expr.type != TypeEnum.BOOL and self.expr.type != TypeEnum.BOOL_OR_INT :
+        if TYPE_CHECKING and self.expr.type != TypeEnum.BOOL and self.expr.type != TypeEnum.BOOL_OR_INT:
             raise Exception(f"Type mismatch: {self.expr.type} and {TypeEnum.BOOL}")
         self.scope = scope
 
@@ -403,3 +443,6 @@ class WhileLoop:
         self.scope.afficher(indent + 2)
         afficher("</scope>", indent + 1)
         afficher("</whileLoop>", indent)
+
+    def __str__(self):
+        return f"WhileLoop({self.expr}, {self.scope})"

@@ -4,65 +4,139 @@ sinput:	resb	255	;reserve a 255 byte space in memory for the users input string
 v$a:	resd	1
 section	.text
 global _start
+		 ; ===== Generating function declarations =====
+		 ; ===== Generating function double =====
 _double:
+		 ; ===== Initialising function double =====
 	push	ebp		
 	mov	ebp,	esp	
-	sub	esp,	0	
-	mov	eax,	[ebp+8]			 ; read <arbre_abstrait.Parameter object at 0x7fd25ff60fa0>
-	push	eax				 ; push <arbre_abstrait.Parameter object at 0x7fd25ff60fa0>
-	mov	eax,	[ebp+8]			 ; read <arbre_abstrait.Parameter object at 0x7fd25ff60fa0>
-	push	eax				 ; push <arbre_abstrait.Parameter object at 0x7fd25ff60fa0>
+		 ; ===== Storing arguments of function double =====
+		 ; ===== Storing argument e =====
+		 ; ===== Stored argument e at offset +8 =====
+		 ; ===== Allocating local variables of function double =====
+		 ; ===== Found 0 local variables in function double =====
+	sub	esp,	0			 ; Substracting space for local variables from esp (0)
+		 ; ===== Generating instructions of function double =====
+		 ; ===== Generating variable assignment Parameter(entier, e) =====
+		 ; ===== Generating expression Operation(VariableRead(e, entier), OperationEnum.PLUS, VariableRead(e, entier)) =====
+		 ; ===== Generating operation Operation(VariableRead(e, entier), OperationEnum.PLUS, VariableRead(e, entier)) =====
+		 ; ===== Generating expression VariableRead(e, entier) =====
+		 ; ===== Generating variable read Parameter(entier, e) =====
+	mov	eax,	[ebp+8]			 ; read Parameter(entier, e)
+	push	eax				 ; push Parameter(entier, e) on stack
+		 ; ===== Finished generating variable read Parameter(entier, e) =====
+		 ; ===== Finished generating expression VariableRead(e, entier) =====
+		 ; ===== Generating expression VariableRead(e, entier) =====
+		 ; ===== Generating variable read Parameter(entier, e) =====
+	mov	eax,	[ebp+8]			 ; read Parameter(entier, e)
+	push	eax				 ; push Parameter(entier, e) on stack
+		 ; ===== Finished generating variable read Parameter(entier, e) =====
+		 ; ===== Finished generating expression VariableRead(e, entier) =====
 	pop	ebx				 ; dépile la seconde operande dans ebx
 	pop	eax				 ; dépile la permière operande dans eax
 	add	eax,	ebx			 ; effectue l'opération eaxOperationEnum.PLUSebx et met le résultat dans eax
 	push	eax				 ; empile le résultat
-	pop	eax		
-	mov	[ebp+8],	eax	
-	mov	eax,	[ebp+8]			 ; read <arbre_abstrait.Parameter object at 0x7fd25ff60fa0>
-	push	eax				 ; push <arbre_abstrait.Parameter object at 0x7fd25ff60fa0>
-	pop	eax		
-	leave			
-	ret			
-	leave			
-	ret			
+		 ; ===== Finished operation OperationEnum.PLUS =====
+		 ; ===== Finished generating expression Operation(VariableRead(e, entier), OperationEnum.PLUS, VariableRead(e, entier)) =====
+	pop	eax				 ; pop value from stack
+	mov	[ebp+8],	eax			 ; assign value to variable
+		 ; ===== Finished generating variable assignment Parameter(entier, e) =====
+		 ; ===== Generating return statement =====
+		 ; ===== Generating expression VariableRead(e, entier) =====
+		 ; ===== Generating variable read Parameter(entier, e) =====
+	mov	eax,	[ebp+8]			 ; read Parameter(entier, e)
+	push	eax				 ; push Parameter(entier, e) on stack
+		 ; ===== Finished generating variable read Parameter(entier, e) =====
+		 ; ===== Finished generating expression VariableRead(e, entier) =====
+	pop	eax				 ; Pop return value from stack
+	leave					 ; Clean up stack
+	ret					 ; Return to caller
+		 ; ===== Finished generating return statement =====
+		 ; ===== Finished generating instructions of function double =====
+		 ; ===== Cleaning up function double =====
+	leave					 ; Clean up stack
+	ret					 ; Return to caller
+		 ; ===== Finished cleaning up function double =====
+		 ; ===== Finished generating function double =====
+		 ; ===== Generating function quadriple =====
 _quadriple:
+		 ; ===== Initialising function quadriple =====
 	push	ebp		
 	mov	ebp,	esp	
-	sub	esp,	0	
+		 ; ===== Storing arguments of function quadriple =====
+		 ; ===== Storing argument e =====
+		 ; ===== Stored argument e at offset +8 =====
+		 ; ===== Allocating local variables of function quadriple =====
+		 ; ===== Found 0 local variables in function quadriple =====
+	sub	esp,	0			 ; Substracting space for local variables from esp (0)
+		 ; ===== Generating instructions of function quadriple =====
+		 ; ===== Generating expression Entier(5) =====
 	push	5		
+		 ; ===== Finished generating expression Entier(5) =====
 	call	_double		
 	push	eax		
-	mov	eax,	[ebp+8]			 ; read <arbre_abstrait.Parameter object at 0x7fd25ff61600>
-	push	eax				 ; push <arbre_abstrait.Parameter object at 0x7fd25ff61600>
+		 ; ===== Generating return statement =====
+		 ; ===== Generating expression Operation(FunctionCall(double, [<arbre_abstrait.VariableRead object at 0x7fa9f624e3e0>], entier, FunctionDeclaration(entier, double, [<arbre_abstrait.Parameter object at 0x7fa9f624de40>])), OperationEnum.PLUS, FunctionCall(double, [<arbre_abstrait.VariableRead object at 0x7fa9f624e530>], entier, FunctionDeclaration(entier, double, [<arbre_abstrait.Parameter object at 0x7fa9f624de40>]))) =====
+		 ; ===== Generating operation Operation(FunctionCall(double, [<arbre_abstrait.VariableRead object at 0x7fa9f624e3e0>], entier, FunctionDeclaration(entier, double, [<arbre_abstrait.Parameter object at 0x7fa9f624de40>])), OperationEnum.PLUS, FunctionCall(double, [<arbre_abstrait.VariableRead object at 0x7fa9f624e530>], entier, FunctionDeclaration(entier, double, [<arbre_abstrait.Parameter object at 0x7fa9f624de40>]))) =====
+		 ; ===== Generating expression FunctionCall(double, [<arbre_abstrait.VariableRead object at 0x7fa9f624e3e0>], entier, FunctionDeclaration(entier, double, [<arbre_abstrait.Parameter object at 0x7fa9f624de40>])) =====
+		 ; ===== Generating expression VariableRead(e, entier) =====
+		 ; ===== Generating variable read Parameter(entier, e) =====
+	mov	eax,	[ebp+8]			 ; read Parameter(entier, e)
+	push	eax				 ; push Parameter(entier, e) on stack
+		 ; ===== Finished generating variable read Parameter(entier, e) =====
+		 ; ===== Finished generating expression VariableRead(e, entier) =====
 	call	_double		
 	push	eax		
-	mov	eax,	[ebp+8]			 ; read <arbre_abstrait.Parameter object at 0x7fd25ff61600>
-	push	eax				 ; push <arbre_abstrait.Parameter object at 0x7fd25ff61600>
+		 ; ===== Finished generating expression FunctionCall(double, [<arbre_abstrait.VariableRead object at 0x7fa9f624e3e0>], entier, FunctionDeclaration(entier, double, [<arbre_abstrait.Parameter object at 0x7fa9f624de40>])) =====
+		 ; ===== Generating expression FunctionCall(double, [<arbre_abstrait.VariableRead object at 0x7fa9f624e530>], entier, FunctionDeclaration(entier, double, [<arbre_abstrait.Parameter object at 0x7fa9f624de40>])) =====
+		 ; ===== Generating expression VariableRead(e, entier) =====
+		 ; ===== Generating variable read Parameter(entier, e) =====
+	mov	eax,	[ebp+8]			 ; read Parameter(entier, e)
+	push	eax				 ; push Parameter(entier, e) on stack
+		 ; ===== Finished generating variable read Parameter(entier, e) =====
+		 ; ===== Finished generating expression VariableRead(e, entier) =====
 	call	_double		
 	push	eax		
+		 ; ===== Finished generating expression FunctionCall(double, [<arbre_abstrait.VariableRead object at 0x7fa9f624e530>], entier, FunctionDeclaration(entier, double, [<arbre_abstrait.Parameter object at 0x7fa9f624de40>])) =====
 	pop	ebx				 ; dépile la seconde operande dans ebx
 	pop	eax				 ; dépile la permière operande dans eax
 	add	eax,	ebx			 ; effectue l'opération eaxOperationEnum.PLUSebx et met le résultat dans eax
 	push	eax				 ; empile le résultat
-	pop	eax		
-	leave			
-	ret			
-	leave			
-	ret			
+		 ; ===== Finished operation OperationEnum.PLUS =====
+		 ; ===== Finished generating expression Operation(FunctionCall(double, [<arbre_abstrait.VariableRead object at 0x7fa9f624e3e0>], entier, FunctionDeclaration(entier, double, [<arbre_abstrait.Parameter object at 0x7fa9f624de40>])), OperationEnum.PLUS, FunctionCall(double, [<arbre_abstrait.VariableRead object at 0x7fa9f624e530>], entier, FunctionDeclaration(entier, double, [<arbre_abstrait.Parameter object at 0x7fa9f624de40>]))) =====
+	pop	eax				 ; Pop return value from stack
+	leave					 ; Clean up stack
+	ret					 ; Return to caller
+		 ; ===== Finished generating return statement =====
+		 ; ===== Finished generating instructions of function quadriple =====
+		 ; ===== Cleaning up function quadriple =====
+	leave					 ; Clean up stack
+	ret					 ; Return to caller
+		 ; ===== Finished cleaning up function quadriple =====
+		 ; ===== Finished generating function quadriple =====
+		 ; ===== End of function declarations =====
+		 ; ===== Generating main function =====
 main:
 	push	ebp		
 	mov	ebp,	esp	
 	sub	esp,	0	
+		 ; ===== Generating expression Entier(5) =====
 	push	5		
+		 ; ===== Finished generating expression Entier(5) =====
 	call	_double		
 	push	eax		
+		 ; ===== Generating expression FunctionCall(quadriple, [<arbre_abstrait.Entier object at 0x7fa9f624e710>], entier, FunctionDeclaration(entier, quadriple, [<arbre_abstrait.Parameter object at 0x7fa9f624e4a0>])) =====
+		 ; ===== Generating expression Entier(10) =====
 	push	10		
+		 ; ===== Finished generating expression Entier(10) =====
 	call	_quadriple		
 	push	eax		
+		 ; ===== Finished generating expression FunctionCall(quadriple, [<arbre_abstrait.Entier object at 0x7fa9f624e710>], entier, FunctionDeclaration(entier, quadriple, [<arbre_abstrait.Parameter object at 0x7fa9f624e4a0>])) =====
 	pop	eax		
 	call	iprintLF		
 	leave			
 	ret			
+		 ; ===== End of main function =====
 _start:
 	call	main		
 	mov	eax,	1			 ; 1 est le code de SYS_EXIT

@@ -3,8 +3,6 @@ from copy import deepcopy
 
 import analyse_syntaxique
 import arbre_abstrait
-from analyse_lexicale import FloLexer
-from analyse_syntaxique import FloParser
 
 num_etiquette_courante = -1  # Permet de donner des noms différents à toutes les étiquettes (en les appelant e0, e1,e2,...)
 
@@ -86,11 +84,14 @@ def gen_programme(programme):
     printifm('v$a:	resd	1')
     printifm('section\t.text')
     printifm('global _start')
-
+    nasm_comment("===== Generating function declarations =====")
     programme_copy = deepcopy(programme)
     for instruction in programme_copy.liste_instructions.instructions:
         if type(instruction) == arbre_abstrait.FunctionDeclaration:
             gen_def_fonction(instruction)
+    nasm_comment("===== End of function declarations =====")
+
+    nasm_comment("===== Generating main function =====")
     printifm('main:')
 
     nasm_instruction("push", "ebp", "", "", "")
@@ -110,13 +111,12 @@ def gen_programme(programme):
     gen_listeInstructions(programme_copy.liste_instructions)
     nasm_instruction("leave", "", "", "", "")
     nasm_instruction("ret", "", "", "", "")
-
+    nasm_comment("===== End of main function =====")
     printifm("_start:")
     nasm_instruction("call", "main", "", "", "")
     nasm_instruction("mov", "eax", "1", "", "1 est le code de SYS_EXIT")
     nasm_instruction("mov", "ebx", "0", comment="0 est le code de retour correct ici")
     nasm_instruction("int", "0x80", "", "", "exit")
-
 
 
 """
@@ -220,46 +220,67 @@ def flatten(l):
 
 
 def gen_def_fonction(function: arbre_abstrait.FunctionDeclaration):
+    nasm_comment(f"===== Generating function {function.name} =====")
     printift(f"_{function.name}:")
+    nasm_comment(f"===== Initialising function {function.name} =====")
     nasm_instruction("push", "ebp", "", "", "")
     nasm_instruction("mov", "ebp", "esp", "", "")
+
+    nasm_comment(f"===== Storing arguments of function {function.name} =====")
     # storing the arguments in FunctionDeclaration.args
     for i in range(len(function.args)):
+        nasm_comment(f"===== Storing argument {function.args[i].name} =====")
         function.args[i].offset = f"+{(len(function.args) - i - 1) * 4 + 8}"
-
+        nasm_comment(f"===== Stored argument {function.args[i].name} at offset {function.args[i].offset} =====")
+    nasm_comment(f"===== Allocating local variables of function {function.name} =====")
     # allocating space for local variables
     variable_defs = function.scope.get_variable_definitions()
     # flatten the list of lists of variable definitions
     while is_nested(variable_defs):
         variable_defs = flatten(variable_defs)
 
+    nasm_comment(f"===== Found {len(variable_defs)} local variables in function {function.name} =====")
+
     space_for_local_variables = len(variable_defs) * 4
-    nasm_instruction("sub", "esp", str(space_for_local_variables), "", "")
+    nasm_instruction("sub", "esp", str(space_for_local_variables), "",
+                     f"Substracting space for local variables from esp ({space_for_local_variables})")
     for i in range(len(variable_defs)):
+        nasm_comment(f"===== Storing local variable {variable_defs[i].name} =====")
         variable_defs[i].offset = f"-{(i + 1) * 4}"
+        nasm_comment(f"===== Stored local variable {variable_defs[i].name} at offset {variable_defs[i].offset} =====")
 
     global is_in_function
     is_in_function = True
+    nasm_comment(f"===== Generating instructions of function {function.name} =====")
     gen_listeInstructions(function.scope)
-    nasm_instruction("leave", "", "", "", "")
-    nasm_instruction("ret", "", "", "", "")
+    nasm_comment(f"===== Finished generating instructions of function {function.name} =====")
+    nasm_comment(f"===== Cleaning up function {function.name} =====")
+    nasm_instruction("leave", "", "", "", comment="Clean up stack")
+    nasm_instruction("ret", "", "", "", comment="Return to caller")
+    nasm_comment(f"===== Finished cleaning up function {function.name} =====")
+    nasm_comment(f"===== Finished generating function {function.name} =====")
     is_in_function = False
 
 
 def gen_return_statement(return_statement: arbre_abstrait.ReturnStatement):
+    nasm_comment(f"===== Generating return statement =====")
     gen_expression(return_statement.exp)
-    nasm_instruction("pop", "eax", "", "", "")
-    nasm_instruction("leave", "", "", "", "")
-    nasm_instruction("ret", "", "", "", "")
+    nasm_instruction("pop", "eax", "", "", comment="Pop return value from stack")
+    nasm_instruction("leave", "", "", "", comment="Clean up stack")
+    nasm_instruction("ret", "", "", "", comment="Return to caller")
+    nasm_comment(f"===== Finished generating return statement =====")
 
 
 def gen_variable_read(variable_read: arbre_abstrait.VariableRead):
+    nasm_comment(f"===== Generating variable read {variable_read.definition} =====")
     nasm_instruction("mov", "eax", f"[ebp{variable_read.definition.offset}]", "",
                      comment=f"read {variable_read.definition}")
-    nasm_instruction("push", "eax", "", "", comment=f"push {variable_read.definition}")
+    nasm_instruction("push", "eax", "", "", comment=f"push {variable_read.definition} on stack")
+    nasm_comment(f"===== Finished generating variable read {variable_read.definition} =====")
 
 
 def gen_condition(condition: arbre_abstrait.Condition):
+    nasm_comment(f"===== Generating condition =====")
     label_else = nasm_nouvelle_etiquette()
     label_fin = nasm_nouvelle_etiquette()
     gen_expression(condition.expr)
@@ -273,9 +294,11 @@ def gen_condition(condition: arbre_abstrait.Condition):
         gen_listeInstructions(condition.scope2)
     printift(label_fin + ":")
     nasm_instruction("push", "eax", "", "", "")
+    nasm_comment(f"===== Finished generating condition =====")
 
 
 def gen_while(while_statement: arbre_abstrait.WhileLoop):
+    nasm_comment(f"===== Generating while loop =====")
     label_debut = nasm_nouvelle_etiquette()
     label_fin = nasm_nouvelle_etiquette()
     printift(label_debut + ":")
@@ -287,15 +310,20 @@ def gen_while(while_statement: arbre_abstrait.WhileLoop):
     nasm_instruction("jmp", label_debut, "", "", "")
     printift(label_fin + ":")
     nasm_instruction("push", "eax", "", "", "")
+    nasm_comment(f"===== Finished generating while loop =====")
 
 
 def gen_variable_assignment(variable_assignment: arbre_abstrait.VariableAssignment):
+    nasm_comment(f"===== Generating variable assignment {variable_assignment.definition} =====")
     gen_expression(variable_assignment.exp)
-    nasm_instruction("pop", "eax", "", "", "")
-    nasm_instruction("mov", f"[ebp{variable_assignment.definition.offset}]", "eax", "", "")
+    nasm_instruction("pop", "eax", "", "", comment="pop value from stack")
+    nasm_instruction("mov", f"[ebp{variable_assignment.definition.offset}]", "eax", "",
+                     comment="assign value to variable")
+    nasm_comment(f"===== Finished generating variable assignment {variable_assignment.definition} =====")
 
 
 def gen_expression(expression):
+    nasm_comment(f"===== Generating expression {expression} =====")
     if type(expression) == arbre_abstrait.Operation:
         gen_operation(expression)  # on calcule et empile la valeur de l'opération
     elif type(expression) == arbre_abstrait.Entier:
@@ -317,6 +345,7 @@ def gen_expression(expression):
     else:
         print("_type d'expression inconnu", type(expression))
         exit(0)
+    nasm_comment(f"===== Finished generating expression {expression} =====")
 
 
 """
@@ -325,6 +354,7 @@ Affiche le code nasm pour calculer l'opération et la mettre en haut de la pile
 
 
 def gen_operation(operation):
+    nasm_comment(f"===== Generating operation {operation} =====")
     op = operation.op
 
     if operation.exp2 is None:
@@ -400,6 +430,7 @@ def gen_operation(operation):
                 raise Exception("Opération non reconnue")
 
     nasm_instruction("push", "eax", "", "", "empile le résultat")
+    nasm_comment(f"===== Finished operation {op} =====")
 
 
 if __name__ == "__main__":
