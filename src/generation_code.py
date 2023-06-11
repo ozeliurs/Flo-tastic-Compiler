@@ -9,6 +9,7 @@ num_etiquette_courante = -1  # Permet de donner des noms différents à toutes l
 
 afficher_table = True
 afficher_nasm = True
+is_in_function = True
 """
 Un print qui ne fonctionne que si la variable afficher_table vaut Vrai.
 (permet de choisir si on affiche le code assembleur ou la table des symboles)
@@ -77,6 +78,7 @@ Affiche le code nasm correspondant à tout un programme
 
 
 def gen_programme(programme):
+    global is_in_function
     printifm('%include\t"io.asm"')
     printifm('section\t.bss')
     printifm('sinput:	resb	255	;reserve a 255 byte space in memory for the users input string')
@@ -89,6 +91,7 @@ def gen_programme(programme):
         if type(instruction) == arbre_abstrait.FunctionDeclaration:
             gen_def_fonction(instruction)
     printifm('_start:')
+    is_in_function = False
     gen_listeInstructions(programme_copy.liste_instructions)
     nasm_instruction("mov", "eax", "1", "", "1 est le code de SYS_EXIT")
     nasm_instruction("mov", "ebx", "0", comment="0 est le code de retour correct ici")
@@ -124,6 +127,8 @@ def gen_instruction(instruction):
     elif type(instruction) == arbre_abstrait.FunctionCall and instruction.function_name == "lire":
         gen_lire(instruction)
     elif type(instruction) == arbre_abstrait.ReturnStatement:
+        if not is_in_function:
+            raise Exception("return statement outside function")
         gen_return_statement(instruction)
 
     elif type(instruction) == arbre_abstrait.Condition:
