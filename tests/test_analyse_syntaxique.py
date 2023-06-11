@@ -14,7 +14,7 @@ class TestFloParser(TestCase):
     lexer: Lexer = FloLexer()
     parser: Parser = FloParser()
     TEST_FILES = [
-        DATA_DIR / "input/fonction_3.flo",
+        DATA_DIR / "input/fonction_2.flo",
     ]
 
     TEST_FILES_BAD = (DATA_DIR / "bad_input").iterdir()

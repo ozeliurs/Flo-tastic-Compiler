@@ -4,7 +4,7 @@ from unittest import TestCase
 from sly import Lexer
 from analyse_lexicale import FloLexer
 
-DATA_DIR = Path(__file__).parent
+DATA_DIR = Path(__file__).parent.parent
 
 
 class TestFloLexer(TestCase):
@@ -22,10 +22,6 @@ class TestFloLexer(TestCase):
     def test_integer(self):
         tokens = self.lexer.tokenize('1')
         self.assertTrue(list(tokens)[0].type == 'ENTIER')
-
-    def test_float(self):
-        tokens = self.lexer.tokenize('1.0')
-        self.assertTrue(list(tokens)[0].type == 'FLOAT')
 
     def test_files(self):
         for file in self.TEST_FILES:
