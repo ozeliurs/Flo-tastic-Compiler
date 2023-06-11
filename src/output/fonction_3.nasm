@@ -16,10 +16,10 @@ _g:
 	sub	esp,	0			 ; Substracting space for local variables from esp (0)
 		 ; ===== Generating instructions of function g =====
 		 ; ===== Generating return statement =====
-		 ; ===== Generating expression FunctionCall(h, [], entier, FunctionDeclaration(entier, h, [])) =====
+		 ; ===== Generating expression FunctionCall(h, , entier, FunctionDeclaration(entier, h, )) =====
 	call	_h		
 	push	eax		
-		 ; ===== Finished generating expression FunctionCall(h, [], entier, FunctionDeclaration(entier, h, [])) =====
+		 ; ===== Finished generating expression FunctionCall(h, , entier, FunctionDeclaration(entier, h, )) =====
 	pop	eax				 ; Pop return value from stack
 	leave					 ; Clean up stack
 	ret					 ; Return to caller
@@ -60,10 +60,10 @@ main:
 	push	ebp		
 	mov	ebp,	esp	
 	sub	esp,	0	
-		 ; ===== Generating expression FunctionCall(g, [], entier, FunctionDeclaration(entier, g, [])) =====
+		 ; ===== Generating expression FunctionCall(g, , entier, FunctionDeclaration(entier, g, )) =====
 	call	_g		
 	push	eax		
-		 ; ===== Finished generating expression FunctionCall(g, [], entier, FunctionDeclaration(entier, g, [])) =====
+		 ; ===== Finished generating expression FunctionCall(g, , entier, FunctionDeclaration(entier, g, )) =====
 	pop	eax		
 	call	iprintLF		
 	leave			

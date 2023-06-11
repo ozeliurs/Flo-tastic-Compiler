@@ -35,10 +35,10 @@ main:
 	push	ebp		
 	mov	ebp,	esp	
 	sub	esp,	0	
-		 ; ===== Generating expression FunctionCall(f, [], entier, FunctionDeclaration(entier, f, [])) =====
+		 ; ===== Generating expression FunctionCall(f, , entier, FunctionDeclaration(entier, f, )) =====
 	call	_f		
 	push	eax		
-		 ; ===== Finished generating expression FunctionCall(f, [], entier, FunctionDeclaration(entier, f, [])) =====
+		 ; ===== Finished generating expression FunctionCall(f, , entier, FunctionDeclaration(entier, f, )) =====
 	pop	eax		
 	call	iprintLF		
 	leave			

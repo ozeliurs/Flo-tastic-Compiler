@@ -127,7 +127,7 @@ main:
 	push	ebp		
 	mov	ebp,	esp	
 	sub	esp,	0	
-		 ; ===== Generating expression FunctionCall(puissance, [<arbre_abstrait.Entier object at 0x7f78b373aa10>, <arbre_abstrait.Entier object at 0x7f78b373aa70>], entier, FunctionDeclaration(entier, puissance, [<arbre_abstrait.Parameter object at 0x7f78b373a8c0>, <arbre_abstrait.Parameter object at 0x7f78b373a380>])) =====
+		 ; ===== Generating expression FunctionCall(puissance, Entier(2), Entier(3), , entier, FunctionDeclaration(entier, puissance, Parameter(entier, a)Parameter(entier, b))) =====
 		 ; ===== Generating expression Entier(2) =====
 	push	2		
 		 ; ===== Finished generating expression Entier(2) =====
@@ -136,10 +136,10 @@ main:
 		 ; ===== Finished generating expression Entier(3) =====
 	call	_puissance		
 	push	eax		
-		 ; ===== Finished generating expression FunctionCall(puissance, [<arbre_abstrait.Entier object at 0x7f78b373aa10>, <arbre_abstrait.Entier object at 0x7f78b373aa70>], entier, FunctionDeclaration(entier, puissance, [<arbre_abstrait.Parameter object at 0x7f78b373a8c0>, <arbre_abstrait.Parameter object at 0x7f78b373a380>])) =====
+		 ; ===== Finished generating expression FunctionCall(puissance, Entier(2), Entier(3), , entier, FunctionDeclaration(entier, puissance, Parameter(entier, a)Parameter(entier, b))) =====
 	pop	eax		
 	call	iprintLF		
-		 ; ===== Generating expression FunctionCall(puissance, [<arbre_abstrait.Entier object at 0x7f78b373ad70>, <arbre_abstrait.Entier object at 0x7f78b373add0>], entier, FunctionDeclaration(entier, puissance, [<arbre_abstrait.Parameter object at 0x7f78b373a8c0>, <arbre_abstrait.Parameter object at 0x7f78b373a380>])) =====
+		 ; ===== Generating expression FunctionCall(puissance, Entier(3), Entier(4), , entier, FunctionDeclaration(entier, puissance, Parameter(entier, a)Parameter(entier, b))) =====
 		 ; ===== Generating expression Entier(3) =====
 	push	3		
 		 ; ===== Finished generating expression Entier(3) =====
@@ -148,10 +148,10 @@ main:
 		 ; ===== Finished generating expression Entier(4) =====
 	call	_puissance		
 	push	eax		
-		 ; ===== Finished generating expression FunctionCall(puissance, [<arbre_abstrait.Entier object at 0x7f78b373ad70>, <arbre_abstrait.Entier object at 0x7f78b373add0>], entier, FunctionDeclaration(entier, puissance, [<arbre_abstrait.Parameter object at 0x7f78b373a8c0>, <arbre_abstrait.Parameter object at 0x7f78b373a380>])) =====
+		 ; ===== Finished generating expression FunctionCall(puissance, Entier(3), Entier(4), , entier, FunctionDeclaration(entier, puissance, Parameter(entier, a)Parameter(entier, b))) =====
 	pop	eax		
 	call	iprintLF		
-		 ; ===== Generating expression FunctionCall(puissance, [<arbre_abstrait.Entier object at 0x7f78b373af50>, <arbre_abstrait.Entier object at 0x7f78b373afb0>], entier, FunctionDeclaration(entier, puissance, [<arbre_abstrait.Parameter object at 0x7f78b373a8c0>, <arbre_abstrait.Parameter object at 0x7f78b373a380>])) =====
+		 ; ===== Generating expression FunctionCall(puissance, Entier(4), Entier(5), , entier, FunctionDeclaration(entier, puissance, Parameter(entier, a)Parameter(entier, b))) =====
 		 ; ===== Generating expression Entier(4) =====
 	push	4		
 		 ; ===== Finished generating expression Entier(4) =====
@@ -160,7 +160,7 @@ main:
 		 ; ===== Finished generating expression Entier(5) =====
 	call	_puissance		
 	push	eax		
-		 ; ===== Finished generating expression FunctionCall(puissance, [<arbre_abstrait.Entier object at 0x7f78b373af50>, <arbre_abstrait.Entier object at 0x7f78b373afb0>], entier, FunctionDeclaration(entier, puissance, [<arbre_abstrait.Parameter object at 0x7f78b373a8c0>, <arbre_abstrait.Parameter object at 0x7f78b373a380>])) =====
+		 ; ===== Finished generating expression FunctionCall(puissance, Entier(4), Entier(5), , entier, FunctionDeclaration(entier, puissance, Parameter(entier, a)Parameter(entier, b))) =====
 	pop	eax		
 	call	iprintLF		
 	leave			

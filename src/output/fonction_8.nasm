@@ -76,9 +76,9 @@ _quadriple:
 	call	_double		
 	push	eax		
 		 ; ===== Generating return statement =====
-		 ; ===== Generating expression Operation(FunctionCall(double, [<arbre_abstrait.VariableRead object at 0x7fa9f624e3e0>], entier, FunctionDeclaration(entier, double, [<arbre_abstrait.Parameter object at 0x7fa9f624de40>])), OperationEnum.PLUS, FunctionCall(double, [<arbre_abstrait.VariableRead object at 0x7fa9f624e530>], entier, FunctionDeclaration(entier, double, [<arbre_abstrait.Parameter object at 0x7fa9f624de40>]))) =====
-		 ; ===== Generating operation Operation(FunctionCall(double, [<arbre_abstrait.VariableRead object at 0x7fa9f624e3e0>], entier, FunctionDeclaration(entier, double, [<arbre_abstrait.Parameter object at 0x7fa9f624de40>])), OperationEnum.PLUS, FunctionCall(double, [<arbre_abstrait.VariableRead object at 0x7fa9f624e530>], entier, FunctionDeclaration(entier, double, [<arbre_abstrait.Parameter object at 0x7fa9f624de40>]))) =====
-		 ; ===== Generating expression FunctionCall(double, [<arbre_abstrait.VariableRead object at 0x7fa9f624e3e0>], entier, FunctionDeclaration(entier, double, [<arbre_abstrait.Parameter object at 0x7fa9f624de40>])) =====
+		 ; ===== Generating expression Operation(FunctionCall(double, VariableRead(e, entier), , entier, FunctionDeclaration(entier, double, Parameter(entier, e))), OperationEnum.PLUS, FunctionCall(double, VariableRead(e, entier), , entier, FunctionDeclaration(entier, double, Parameter(entier, e)))) =====
+		 ; ===== Generating operation Operation(FunctionCall(double, VariableRead(e, entier), , entier, FunctionDeclaration(entier, double, Parameter(entier, e))), OperationEnum.PLUS, FunctionCall(double, VariableRead(e, entier), , entier, FunctionDeclaration(entier, double, Parameter(entier, e)))) =====
+		 ; ===== Generating expression FunctionCall(double, VariableRead(e, entier), , entier, FunctionDeclaration(entier, double, Parameter(entier, e))) =====
 		 ; ===== Generating expression VariableRead(e, entier) =====
 		 ; ===== Generating variable read Parameter(entier, e) =====
 	mov	eax,	[ebp+8]			 ; read Parameter(entier, e)
@@ -87,8 +87,8 @@ _quadriple:
 		 ; ===== Finished generating expression VariableRead(e, entier) =====
 	call	_double		
 	push	eax		
-		 ; ===== Finished generating expression FunctionCall(double, [<arbre_abstrait.VariableRead object at 0x7fa9f624e3e0>], entier, FunctionDeclaration(entier, double, [<arbre_abstrait.Parameter object at 0x7fa9f624de40>])) =====
-		 ; ===== Generating expression FunctionCall(double, [<arbre_abstrait.VariableRead object at 0x7fa9f624e530>], entier, FunctionDeclaration(entier, double, [<arbre_abstrait.Parameter object at 0x7fa9f624de40>])) =====
+		 ; ===== Finished generating expression FunctionCall(double, VariableRead(e, entier), , entier, FunctionDeclaration(entier, double, Parameter(entier, e))) =====
+		 ; ===== Generating expression FunctionCall(double, VariableRead(e, entier), , entier, FunctionDeclaration(entier, double, Parameter(entier, e))) =====
 		 ; ===== Generating expression VariableRead(e, entier) =====
 		 ; ===== Generating variable read Parameter(entier, e) =====
 	mov	eax,	[ebp+8]			 ; read Parameter(entier, e)
@@ -97,13 +97,13 @@ _quadriple:
 		 ; ===== Finished generating expression VariableRead(e, entier) =====
 	call	_double		
 	push	eax		
-		 ; ===== Finished generating expression FunctionCall(double, [<arbre_abstrait.VariableRead object at 0x7fa9f624e530>], entier, FunctionDeclaration(entier, double, [<arbre_abstrait.Parameter object at 0x7fa9f624de40>])) =====
+		 ; ===== Finished generating expression FunctionCall(double, VariableRead(e, entier), , entier, FunctionDeclaration(entier, double, Parameter(entier, e))) =====
 	pop	ebx				 ; dépile la seconde operande dans ebx
 	pop	eax				 ; dépile la permière operande dans eax
 	add	eax,	ebx			 ; effectue l'opération eaxOperationEnum.PLUSebx et met le résultat dans eax
 	push	eax				 ; empile le résultat
 		 ; ===== Finished operation OperationEnum.PLUS =====
-		 ; ===== Finished generating expression Operation(FunctionCall(double, [<arbre_abstrait.VariableRead object at 0x7fa9f624e3e0>], entier, FunctionDeclaration(entier, double, [<arbre_abstrait.Parameter object at 0x7fa9f624de40>])), OperationEnum.PLUS, FunctionCall(double, [<arbre_abstrait.VariableRead object at 0x7fa9f624e530>], entier, FunctionDeclaration(entier, double, [<arbre_abstrait.Parameter object at 0x7fa9f624de40>]))) =====
+		 ; ===== Finished generating expression Operation(FunctionCall(double, VariableRead(e, entier), , entier, FunctionDeclaration(entier, double, Parameter(entier, e))), OperationEnum.PLUS, FunctionCall(double, VariableRead(e, entier), , entier, FunctionDeclaration(entier, double, Parameter(entier, e)))) =====
 	pop	eax				 ; Pop return value from stack
 	leave					 ; Clean up stack
 	ret					 ; Return to caller
@@ -125,13 +125,13 @@ main:
 		 ; ===== Finished generating expression Entier(5) =====
 	call	_double		
 	push	eax		
-		 ; ===== Generating expression FunctionCall(quadriple, [<arbre_abstrait.Entier object at 0x7fa9f624e710>], entier, FunctionDeclaration(entier, quadriple, [<arbre_abstrait.Parameter object at 0x7fa9f624e4a0>])) =====
+		 ; ===== Generating expression FunctionCall(quadriple, Entier(10), , entier, FunctionDeclaration(entier, quadriple, Parameter(entier, e))) =====
 		 ; ===== Generating expression Entier(10) =====
 	push	10		
 		 ; ===== Finished generating expression Entier(10) =====
 	call	_quadriple		
 	push	eax		
-		 ; ===== Finished generating expression FunctionCall(quadriple, [<arbre_abstrait.Entier object at 0x7fa9f624e710>], entier, FunctionDeclaration(entier, quadriple, [<arbre_abstrait.Parameter object at 0x7fa9f624e4a0>])) =====
+		 ; ===== Finished generating expression FunctionCall(quadriple, Entier(10), , entier, FunctionDeclaration(entier, quadriple, Parameter(entier, e))) =====
 	pop	eax		
 	call	iprintLF		
 	leave			

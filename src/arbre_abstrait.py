@@ -69,6 +69,12 @@ class ParameterList(list):
             parameter.afficher(indent + 1)
         afficher("</liste_parametres>", indent)
 
+    def __str__(self):
+        s = ""
+        for parameter in self:
+            s += str(parameter)
+        return s
+
 
 class FunctionDeclaration:
     def __init__(self, type, name, args, skip=False):
@@ -347,6 +353,12 @@ class ExprList(list):
         for expression in self:
             expression.afficher(indent + 1)
         afficher("</liste_expressions>", indent)
+
+    def __str__(self):
+        str = ""
+        for expression in self:
+            str += f"{expression}, "
+        return str
 
 
 class FunctionCall:

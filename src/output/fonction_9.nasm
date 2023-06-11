@@ -61,13 +61,13 @@ main:
 	push	ebp		
 	mov	ebp,	esp	
 	sub	esp,	0	
-		 ; ===== Generating expression FunctionCall(f, [<arbre_abstrait.Entier object at 0x7f6794ce5c60>], entier, FunctionDeclaration(entier, f, [<arbre_abstrait.Parameter object at 0x7f6794ce5a50>])) =====
+		 ; ===== Generating expression FunctionCall(f, Entier(5), , entier, FunctionDeclaration(entier, f, Parameter(entier, x))) =====
 		 ; ===== Generating expression Entier(5) =====
 	push	5		
 		 ; ===== Finished generating expression Entier(5) =====
 	call	_f		
 	push	eax		
-		 ; ===== Finished generating expression FunctionCall(f, [<arbre_abstrait.Entier object at 0x7f6794ce5c60>], entier, FunctionDeclaration(entier, f, [<arbre_abstrait.Parameter object at 0x7f6794ce5a50>])) =====
+		 ; ===== Finished generating expression FunctionCall(f, Entier(5), , entier, FunctionDeclaration(entier, f, Parameter(entier, x))) =====
 	pop	eax		
 	call	iprintLF		
 	leave			

@@ -8,6 +8,7 @@ num_etiquette_courante = -1  # Permet de donner des noms différents à toutes l
 
 afficher_table = True
 afficher_nasm = True
+ENABLE_COMMENT = True
 is_in_function = True
 """
 Un print qui ne fonctionne que si la variable afficher_table vaut Vrai.
@@ -37,7 +38,7 @@ Fonction locale, permet d'afficher un commentaire dans le code nasm.
 
 
 def nasm_comment(comment):
-    if comment != "":
+    if comment != "" and ENABLE_COMMENT:
         printifm(
             "\t\t ; " + comment)  # le point virgule indique le début d'un commentaire en nasm. Les tabulations sont là pour faire jolie.
     else:

@@ -83,35 +83,35 @@ main:
 	push	ebp		
 	mov	ebp,	esp	
 	sub	esp,	0	
-		 ; ===== Generating expression Operation(FunctionCall(f, [], entier, FunctionDeclaration(entier, f, [])), OperationEnum.PLUS, FunctionCall(g, [], entier, FunctionDeclaration(entier, g, []))) =====
-		 ; ===== Generating operation Operation(FunctionCall(f, [], entier, FunctionDeclaration(entier, f, [])), OperationEnum.PLUS, FunctionCall(g, [], entier, FunctionDeclaration(entier, g, []))) =====
-		 ; ===== Generating expression FunctionCall(f, [], entier, FunctionDeclaration(entier, f, [])) =====
+		 ; ===== Generating expression Operation(FunctionCall(f, , entier, FunctionDeclaration(entier, f, )), OperationEnum.PLUS, FunctionCall(g, , entier, FunctionDeclaration(entier, g, ))) =====
+		 ; ===== Generating operation Operation(FunctionCall(f, , entier, FunctionDeclaration(entier, f, )), OperationEnum.PLUS, FunctionCall(g, , entier, FunctionDeclaration(entier, g, ))) =====
+		 ; ===== Generating expression FunctionCall(f, , entier, FunctionDeclaration(entier, f, )) =====
 	call	_f		
 	push	eax		
-		 ; ===== Finished generating expression FunctionCall(f, [], entier, FunctionDeclaration(entier, f, [])) =====
-		 ; ===== Generating expression FunctionCall(g, [], entier, FunctionDeclaration(entier, g, [])) =====
+		 ; ===== Finished generating expression FunctionCall(f, , entier, FunctionDeclaration(entier, f, )) =====
+		 ; ===== Generating expression FunctionCall(g, , entier, FunctionDeclaration(entier, g, )) =====
 	call	_g		
 	push	eax		
-		 ; ===== Finished generating expression FunctionCall(g, [], entier, FunctionDeclaration(entier, g, [])) =====
+		 ; ===== Finished generating expression FunctionCall(g, , entier, FunctionDeclaration(entier, g, )) =====
 	pop	ebx				 ; dépile la seconde operande dans ebx
 	pop	eax				 ; dépile la permière operande dans eax
 	add	eax,	ebx			 ; effectue l'opération eaxOperationEnum.PLUSebx et met le résultat dans eax
 	push	eax				 ; empile le résultat
 		 ; ===== Finished operation OperationEnum.PLUS =====
-		 ; ===== Finished generating expression Operation(FunctionCall(f, [], entier, FunctionDeclaration(entier, f, [])), OperationEnum.PLUS, FunctionCall(g, [], entier, FunctionDeclaration(entier, g, []))) =====
+		 ; ===== Finished generating expression Operation(FunctionCall(f, , entier, FunctionDeclaration(entier, f, )), OperationEnum.PLUS, FunctionCall(g, , entier, FunctionDeclaration(entier, g, ))) =====
 	pop	eax		
 	call	iprintLF		
-		 ; ===== Generating expression Operation(FunctionCall(h, [], booleen, FunctionDeclaration(booleen, h, [])), OperationEnum.NOT, None) =====
-		 ; ===== Generating operation Operation(FunctionCall(h, [], booleen, FunctionDeclaration(booleen, h, [])), OperationEnum.NOT, None) =====
-		 ; ===== Generating expression FunctionCall(h, [], booleen, FunctionDeclaration(booleen, h, [])) =====
+		 ; ===== Generating expression Operation(FunctionCall(h, , booleen, FunctionDeclaration(booleen, h, )), OperationEnum.NOT, None) =====
+		 ; ===== Generating operation Operation(FunctionCall(h, , booleen, FunctionDeclaration(booleen, h, )), OperationEnum.NOT, None) =====
+		 ; ===== Generating expression FunctionCall(h, , booleen, FunctionDeclaration(booleen, h, )) =====
 	call	_h		
 	push	eax		
-		 ; ===== Finished generating expression FunctionCall(h, [], booleen, FunctionDeclaration(booleen, h, [])) =====
+		 ; ===== Finished generating expression FunctionCall(h, , booleen, FunctionDeclaration(booleen, h, )) =====
 	pop	eax				 ; dépile la permière operande dans eax
 	xor	eax,	1			 ; effectue l'opération non eax et met le résultat dans eax
 	push	eax				 ; empile le résultat
 		 ; ===== Finished operation OperationEnum.NOT =====
-		 ; ===== Finished generating expression Operation(FunctionCall(h, [], booleen, FunctionDeclaration(booleen, h, [])), OperationEnum.NOT, None) =====
+		 ; ===== Finished generating expression Operation(FunctionCall(h, , booleen, FunctionDeclaration(booleen, h, )), OperationEnum.NOT, None) =====
 	pop	eax		
 	call	iprintLF		
 	leave			

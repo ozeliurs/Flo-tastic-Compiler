@@ -13,14 +13,14 @@ main:
 	sub	esp,	0	
 		 ; ===== Generating while loop =====
 e0:
-		 ; ===== Generating expression Operation(FunctionCall(lire, [], TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, [])), OperationEnum.EQUALITY, Entier(0)) =====
-		 ; ===== Generating operation Operation(FunctionCall(lire, [], TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, [])), OperationEnum.EQUALITY, Entier(0)) =====
-		 ; ===== Generating expression FunctionCall(lire, [], TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, [])) =====
+		 ; ===== Generating expression Operation(FunctionCall(lire, , TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, )), OperationEnum.EQUALITY, Entier(0)) =====
+		 ; ===== Generating operation Operation(FunctionCall(lire, , TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, )), OperationEnum.EQUALITY, Entier(0)) =====
+		 ; ===== Generating expression FunctionCall(lire, , TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, )) =====
 	mov	eax,	sinput	
 	call	readline		
 	call	atoi		
 	push	eax		
-		 ; ===== Finished generating expression FunctionCall(lire, [], TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, [])) =====
+		 ; ===== Finished generating expression FunctionCall(lire, , TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, )) =====
 		 ; ===== Generating expression Entier(0) =====
 	push	0		
 		 ; ===== Finished generating expression Entier(0) =====
@@ -31,7 +31,7 @@ e0:
 	movzx	eax,	al			 ; met 0 ou 1 dans eax
 	push	eax				 ; empile le résultat
 		 ; ===== Finished operation OperationEnum.EQUALITY =====
-		 ; ===== Finished generating expression Operation(FunctionCall(lire, [], TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, [])), OperationEnum.EQUALITY, Entier(0)) =====
+		 ; ===== Finished generating expression Operation(FunctionCall(lire, , TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, )), OperationEnum.EQUALITY, Entier(0)) =====
 	pop	eax		
 	cmp	eax,	0	
 	je	e1		
@@ -42,14 +42,14 @@ e0:
 	call	iprintLF		
 		 ; ===== Generating while loop =====
 e2:
-		 ; ===== Generating expression Operation(FunctionCall(lire, [], TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, [])), OperationEnum.EQUALITY, Entier(1)) =====
-		 ; ===== Generating operation Operation(FunctionCall(lire, [], TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, [])), OperationEnum.EQUALITY, Entier(1)) =====
-		 ; ===== Generating expression FunctionCall(lire, [], TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, [])) =====
+		 ; ===== Generating expression Operation(FunctionCall(lire, , TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, )), OperationEnum.EQUALITY, Entier(1)) =====
+		 ; ===== Generating operation Operation(FunctionCall(lire, , TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, )), OperationEnum.EQUALITY, Entier(1)) =====
+		 ; ===== Generating expression FunctionCall(lire, , TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, )) =====
 	mov	eax,	sinput	
 	call	readline		
 	call	atoi		
 	push	eax		
-		 ; ===== Finished generating expression FunctionCall(lire, [], TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, [])) =====
+		 ; ===== Finished generating expression FunctionCall(lire, , TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, )) =====
 		 ; ===== Generating expression Entier(1) =====
 	push	1		
 		 ; ===== Finished generating expression Entier(1) =====
@@ -60,7 +60,7 @@ e2:
 	movzx	eax,	al			 ; met 0 ou 1 dans eax
 	push	eax				 ; empile le résultat
 		 ; ===== Finished operation OperationEnum.EQUALITY =====
-		 ; ===== Finished generating expression Operation(FunctionCall(lire, [], TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, [])), OperationEnum.EQUALITY, Entier(1)) =====
+		 ; ===== Finished generating expression Operation(FunctionCall(lire, , TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, )), OperationEnum.EQUALITY, Entier(1)) =====
 	pop	eax		
 	cmp	eax,	0	
 	je	e3		

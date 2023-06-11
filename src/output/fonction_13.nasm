@@ -55,9 +55,9 @@ e0:
 e1:
 	push	eax		
 		 ; ===== Finished generating condition =====
-		 ; ===== Generating expression Operation(FunctionCall(somme, [<arbre_abstrait.Operation object at 0x7f684d6fa5f0>], entier, FunctionDeclaration(entier, somme, [<arbre_abstrait.Parameter object at 0x7f684d6fa1a0>])), OperationEnum.PLUS, VariableRead(n, entier)) =====
-		 ; ===== Generating operation Operation(FunctionCall(somme, [<arbre_abstrait.Operation object at 0x7f684d6fa5f0>], entier, FunctionDeclaration(entier, somme, [<arbre_abstrait.Parameter object at 0x7f684d6fa1a0>])), OperationEnum.PLUS, VariableRead(n, entier)) =====
-		 ; ===== Generating expression FunctionCall(somme, [<arbre_abstrait.Operation object at 0x7f684d6fa5f0>], entier, FunctionDeclaration(entier, somme, [<arbre_abstrait.Parameter object at 0x7f684d6fa1a0>])) =====
+		 ; ===== Generating expression Operation(FunctionCall(somme, Operation(VariableRead(n, entier), OperationEnum.MINUS, Entier(1)), , entier, FunctionDeclaration(entier, somme, Parameter(entier, n))), OperationEnum.PLUS, VariableRead(n, entier)) =====
+		 ; ===== Generating operation Operation(FunctionCall(somme, Operation(VariableRead(n, entier), OperationEnum.MINUS, Entier(1)), , entier, FunctionDeclaration(entier, somme, Parameter(entier, n))), OperationEnum.PLUS, VariableRead(n, entier)) =====
+		 ; ===== Generating expression FunctionCall(somme, Operation(VariableRead(n, entier), OperationEnum.MINUS, Entier(1)), , entier, FunctionDeclaration(entier, somme, Parameter(entier, n))) =====
 		 ; ===== Generating expression Operation(VariableRead(n, entier), OperationEnum.MINUS, Entier(1)) =====
 		 ; ===== Generating operation Operation(VariableRead(n, entier), OperationEnum.MINUS, Entier(1)) =====
 		 ; ===== Generating expression VariableRead(n, entier) =====
@@ -77,7 +77,7 @@ e1:
 		 ; ===== Finished generating expression Operation(VariableRead(n, entier), OperationEnum.MINUS, Entier(1)) =====
 	call	_somme		
 	push	eax		
-		 ; ===== Finished generating expression FunctionCall(somme, [<arbre_abstrait.Operation object at 0x7f684d6fa5f0>], entier, FunctionDeclaration(entier, somme, [<arbre_abstrait.Parameter object at 0x7f684d6fa1a0>])) =====
+		 ; ===== Finished generating expression FunctionCall(somme, Operation(VariableRead(n, entier), OperationEnum.MINUS, Entier(1)), , entier, FunctionDeclaration(entier, somme, Parameter(entier, n))) =====
 		 ; ===== Generating expression VariableRead(n, entier) =====
 		 ; ===== Generating variable read Parameter(entier, n) =====
 	mov	eax,	[ebp+8]			 ; read Parameter(entier, n)
@@ -89,15 +89,15 @@ e1:
 	add	eax,	ebx			 ; effectue l'opération eaxOperationEnum.PLUSebx et met le résultat dans eax
 	push	eax				 ; empile le résultat
 		 ; ===== Finished operation OperationEnum.PLUS =====
-		 ; ===== Finished generating expression Operation(FunctionCall(somme, [<arbre_abstrait.Operation object at 0x7f684d6fa5f0>], entier, FunctionDeclaration(entier, somme, [<arbre_abstrait.Parameter object at 0x7f684d6fa1a0>])), OperationEnum.PLUS, VariableRead(n, entier)) =====
+		 ; ===== Finished generating expression Operation(FunctionCall(somme, Operation(VariableRead(n, entier), OperationEnum.MINUS, Entier(1)), , entier, FunctionDeclaration(entier, somme, Parameter(entier, n))), OperationEnum.PLUS, VariableRead(n, entier)) =====
 	pop	eax		
 	mov	[ebp-4],	eax	
 		 ; ===== Generating return statement =====
 		 ; ===== Generating expression VariableRead(res, entier) =====
-		 ; ===== Generating variable read VariableDefinitionAssignment(entier, res, Operation(FunctionCall(somme, [<arbre_abstrait.Operation object at 0x7f684d6fa5f0>], entier, FunctionDeclaration(entier, somme, [<arbre_abstrait.Parameter object at 0x7f684d6fa1a0>])), OperationEnum.PLUS, VariableRead(n, entier)), -4) =====
-	mov	eax,	[ebp-4]			 ; read VariableDefinitionAssignment(entier, res, Operation(FunctionCall(somme, [<arbre_abstrait.Operation object at 0x7f684d6fa5f0>], entier, FunctionDeclaration(entier, somme, [<arbre_abstrait.Parameter object at 0x7f684d6fa1a0>])), OperationEnum.PLUS, VariableRead(n, entier)), -4)
-	push	eax				 ; push VariableDefinitionAssignment(entier, res, Operation(FunctionCall(somme, [<arbre_abstrait.Operation object at 0x7f684d6fa5f0>], entier, FunctionDeclaration(entier, somme, [<arbre_abstrait.Parameter object at 0x7f684d6fa1a0>])), OperationEnum.PLUS, VariableRead(n, entier)), -4) on stack
-		 ; ===== Finished generating variable read VariableDefinitionAssignment(entier, res, Operation(FunctionCall(somme, [<arbre_abstrait.Operation object at 0x7f684d6fa5f0>], entier, FunctionDeclaration(entier, somme, [<arbre_abstrait.Parameter object at 0x7f684d6fa1a0>])), OperationEnum.PLUS, VariableRead(n, entier)), -4) =====
+		 ; ===== Generating variable read VariableDefinitionAssignment(entier, res, Operation(FunctionCall(somme, Operation(VariableRead(n, entier), OperationEnum.MINUS, Entier(1)), , entier, FunctionDeclaration(entier, somme, Parameter(entier, n))), OperationEnum.PLUS, VariableRead(n, entier)), -4) =====
+	mov	eax,	[ebp-4]			 ; read VariableDefinitionAssignment(entier, res, Operation(FunctionCall(somme, Operation(VariableRead(n, entier), OperationEnum.MINUS, Entier(1)), , entier, FunctionDeclaration(entier, somme, Parameter(entier, n))), OperationEnum.PLUS, VariableRead(n, entier)), -4)
+	push	eax				 ; push VariableDefinitionAssignment(entier, res, Operation(FunctionCall(somme, Operation(VariableRead(n, entier), OperationEnum.MINUS, Entier(1)), , entier, FunctionDeclaration(entier, somme, Parameter(entier, n))), OperationEnum.PLUS, VariableRead(n, entier)), -4) on stack
+		 ; ===== Finished generating variable read VariableDefinitionAssignment(entier, res, Operation(FunctionCall(somme, Operation(VariableRead(n, entier), OperationEnum.MINUS, Entier(1)), , entier, FunctionDeclaration(entier, somme, Parameter(entier, n))), OperationEnum.PLUS, VariableRead(n, entier)), -4) =====
 		 ; ===== Finished generating expression VariableRead(res, entier) =====
 	pop	eax				 ; Pop return value from stack
 	leave					 ; Clean up stack
@@ -115,49 +115,49 @@ main:
 	push	ebp		
 	mov	ebp,	esp	
 	sub	esp,	0	
-		 ; ===== Generating expression FunctionCall(somme, [<arbre_abstrait.Entier object at 0x7f684d6fa920>], entier, FunctionDeclaration(entier, somme, [<arbre_abstrait.Parameter object at 0x7f684d6fa1a0>])) =====
+		 ; ===== Generating expression FunctionCall(somme, Entier(1), , entier, FunctionDeclaration(entier, somme, Parameter(entier, n))) =====
 		 ; ===== Generating expression Entier(1) =====
 	push	1		
 		 ; ===== Finished generating expression Entier(1) =====
 	call	_somme		
 	push	eax		
-		 ; ===== Finished generating expression FunctionCall(somme, [<arbre_abstrait.Entier object at 0x7f684d6fa920>], entier, FunctionDeclaration(entier, somme, [<arbre_abstrait.Parameter object at 0x7f684d6fa1a0>])) =====
+		 ; ===== Finished generating expression FunctionCall(somme, Entier(1), , entier, FunctionDeclaration(entier, somme, Parameter(entier, n))) =====
 	pop	eax		
 	call	iprintLF		
-		 ; ===== Generating expression FunctionCall(somme, [<arbre_abstrait.Entier object at 0x7f684d6fac20>], entier, FunctionDeclaration(entier, somme, [<arbre_abstrait.Parameter object at 0x7f684d6fa1a0>])) =====
+		 ; ===== Generating expression FunctionCall(somme, Entier(2), , entier, FunctionDeclaration(entier, somme, Parameter(entier, n))) =====
 		 ; ===== Generating expression Entier(2) =====
 	push	2		
 		 ; ===== Finished generating expression Entier(2) =====
 	call	_somme		
 	push	eax		
-		 ; ===== Finished generating expression FunctionCall(somme, [<arbre_abstrait.Entier object at 0x7f684d6fac20>], entier, FunctionDeclaration(entier, somme, [<arbre_abstrait.Parameter object at 0x7f684d6fa1a0>])) =====
+		 ; ===== Finished generating expression FunctionCall(somme, Entier(2), , entier, FunctionDeclaration(entier, somme, Parameter(entier, n))) =====
 	pop	eax		
 	call	iprintLF		
-		 ; ===== Generating expression FunctionCall(somme, [<arbre_abstrait.Entier object at 0x7f684d6fada0>], entier, FunctionDeclaration(entier, somme, [<arbre_abstrait.Parameter object at 0x7f684d6fa1a0>])) =====
+		 ; ===== Generating expression FunctionCall(somme, Entier(3), , entier, FunctionDeclaration(entier, somme, Parameter(entier, n))) =====
 		 ; ===== Generating expression Entier(3) =====
 	push	3		
 		 ; ===== Finished generating expression Entier(3) =====
 	call	_somme		
 	push	eax		
-		 ; ===== Finished generating expression FunctionCall(somme, [<arbre_abstrait.Entier object at 0x7f684d6fada0>], entier, FunctionDeclaration(entier, somme, [<arbre_abstrait.Parameter object at 0x7f684d6fa1a0>])) =====
+		 ; ===== Finished generating expression FunctionCall(somme, Entier(3), , entier, FunctionDeclaration(entier, somme, Parameter(entier, n))) =====
 	pop	eax		
 	call	iprintLF		
-		 ; ===== Generating expression FunctionCall(somme, [<arbre_abstrait.Entier object at 0x7f684d6faf20>], entier, FunctionDeclaration(entier, somme, [<arbre_abstrait.Parameter object at 0x7f684d6fa1a0>])) =====
+		 ; ===== Generating expression FunctionCall(somme, Entier(4), , entier, FunctionDeclaration(entier, somme, Parameter(entier, n))) =====
 		 ; ===== Generating expression Entier(4) =====
 	push	4		
 		 ; ===== Finished generating expression Entier(4) =====
 	call	_somme		
 	push	eax		
-		 ; ===== Finished generating expression FunctionCall(somme, [<arbre_abstrait.Entier object at 0x7f684d6faf20>], entier, FunctionDeclaration(entier, somme, [<arbre_abstrait.Parameter object at 0x7f684d6fa1a0>])) =====
+		 ; ===== Finished generating expression FunctionCall(somme, Entier(4), , entier, FunctionDeclaration(entier, somme, Parameter(entier, n))) =====
 	pop	eax		
 	call	iprintLF		
-		 ; ===== Generating expression FunctionCall(somme, [<arbre_abstrait.Entier object at 0x7f684d6fb0a0>], entier, FunctionDeclaration(entier, somme, [<arbre_abstrait.Parameter object at 0x7f684d6fa1a0>])) =====
+		 ; ===== Generating expression FunctionCall(somme, Entier(5), , entier, FunctionDeclaration(entier, somme, Parameter(entier, n))) =====
 		 ; ===== Generating expression Entier(5) =====
 	push	5		
 		 ; ===== Finished generating expression Entier(5) =====
 	call	_somme		
 	push	eax		
-		 ; ===== Finished generating expression FunctionCall(somme, [<arbre_abstrait.Entier object at 0x7f684d6fb0a0>], entier, FunctionDeclaration(entier, somme, [<arbre_abstrait.Parameter object at 0x7f684d6fa1a0>])) =====
+		 ; ===== Finished generating expression FunctionCall(somme, Entier(5), , entier, FunctionDeclaration(entier, somme, Parameter(entier, n))) =====
 	pop	eax		
 	call	iprintLF		
 	leave			

@@ -13,16 +13,16 @@ main:
 	sub	esp,	0	
 		 ; ===== Generating while loop =====
 e0:
-		 ; ===== Generating expression Operation(Operation(FunctionCall(lire, [], TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, [])), OperationEnum.MODULO, Entier(2)), OperationEnum.INEQUALITY, Entier(0)) =====
-		 ; ===== Generating operation Operation(Operation(FunctionCall(lire, [], TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, [])), OperationEnum.MODULO, Entier(2)), OperationEnum.INEQUALITY, Entier(0)) =====
-		 ; ===== Generating expression Operation(FunctionCall(lire, [], TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, [])), OperationEnum.MODULO, Entier(2)) =====
-		 ; ===== Generating operation Operation(FunctionCall(lire, [], TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, [])), OperationEnum.MODULO, Entier(2)) =====
-		 ; ===== Generating expression FunctionCall(lire, [], TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, [])) =====
+		 ; ===== Generating expression Operation(Operation(FunctionCall(lire, , TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, )), OperationEnum.MODULO, Entier(2)), OperationEnum.INEQUALITY, Entier(0)) =====
+		 ; ===== Generating operation Operation(Operation(FunctionCall(lire, , TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, )), OperationEnum.MODULO, Entier(2)), OperationEnum.INEQUALITY, Entier(0)) =====
+		 ; ===== Generating expression Operation(FunctionCall(lire, , TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, )), OperationEnum.MODULO, Entier(2)) =====
+		 ; ===== Generating operation Operation(FunctionCall(lire, , TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, )), OperationEnum.MODULO, Entier(2)) =====
+		 ; ===== Generating expression FunctionCall(lire, , TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, )) =====
 	mov	eax,	sinput	
 	call	readline		
 	call	atoi		
 	push	eax		
-		 ; ===== Finished generating expression FunctionCall(lire, [], TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, [])) =====
+		 ; ===== Finished generating expression FunctionCall(lire, , TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, )) =====
 		 ; ===== Generating expression Entier(2) =====
 	push	2		
 		 ; ===== Finished generating expression Entier(2) =====
@@ -33,7 +33,7 @@ e0:
 	mov	eax,	edx			 ; met le reste dans eax
 	push	eax				 ; empile le résultat
 		 ; ===== Finished operation OperationEnum.MODULO =====
-		 ; ===== Finished generating expression Operation(FunctionCall(lire, [], TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, [])), OperationEnum.MODULO, Entier(2)) =====
+		 ; ===== Finished generating expression Operation(FunctionCall(lire, , TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, )), OperationEnum.MODULO, Entier(2)) =====
 		 ; ===== Generating expression Entier(0) =====
 	push	0		
 		 ; ===== Finished generating expression Entier(0) =====
@@ -44,7 +44,7 @@ e0:
 	movzx	eax,	al			 ; met 0 ou 1 dans eax
 	push	eax				 ; empile le résultat
 		 ; ===== Finished operation OperationEnum.INEQUALITY =====
-		 ; ===== Finished generating expression Operation(Operation(FunctionCall(lire, [], TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, [])), OperationEnum.MODULO, Entier(2)), OperationEnum.INEQUALITY, Entier(0)) =====
+		 ; ===== Finished generating expression Operation(Operation(FunctionCall(lire, , TypeEnum.ENTIER, FunctionDeclaration(TypeEnum.ENTIER, lire, )), OperationEnum.MODULO, Entier(2)), OperationEnum.INEQUALITY, Entier(0)) =====
 	pop	eax		
 	cmp	eax,	0	
 	je	e1		
