@@ -8,7 +8,7 @@ class FloLexer(Lexer):
     tokens = {
         TYPE, ET, OU, NON, SI, SINONSI,
         SINON, TANTQUE, RETOURNER, EGAL, DIFFERENT, INFERIEUR_OU_EGAL,
-        SUPERIEUR_OU_EGAL, INFERIEUR, SUPERIEUR, VRAI, FAUX, BOOLEAN,IDENTIFIANT, ENTIER,
+        SUPERIEUR_OU_EGAL, INFERIEUR, SUPERIEUR, VRAI, FAUX, BOOLEAN,IDENTIFIANT, ENTIER
     }
 
     # Les caractères litéraux sont des caractères uniques qui sont retournés tel quel quand rencontré par l'analyse lexicale.
@@ -26,7 +26,7 @@ class FloLexer(Lexer):
 
     @_(r'Vrai|Faux')
     def BOOLEAN(self, t):
-        t.value = bool(t.value)
+        t.value = True if t.value == 'Vrai' else False
         return t
 
     # cas général

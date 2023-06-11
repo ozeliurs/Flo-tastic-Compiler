@@ -19,13 +19,16 @@ class FloParser(Parser):
         ('left', 'INFERIEUR', 'SUPERIEUR', 'INFERIEUR_OU_EGAL', 'SUPERIEUR_OU_EGAL', 'DIFFERENT'),
         ('left', '+', '-'),
         ('left', '*', '/', '%'),
+        ('nonassoc', 'UMINUS'),
     )
 
     # Règles gramaticales et actions associées
 
     @_('listeInstructions')
     def prog(self, p):
-        return arbre_abstrait.Programme(p[0])
+        p = arbre_abstrait.Programme(p[0])
+        arbre_abstrait.reset_stack()
+        return p
 
     @_('instruction')
     def listeInstructions(self, p):
@@ -33,13 +36,13 @@ class FloParser(Parser):
         l.instructions.append(p[0])
         return l
 
-    @_('instruction listeInstructions')
+    @_('listeInstructions instruction')
     def listeInstructions(self, p):
-        p[1].instructions.append(p[0])
-        return p[1]
+        p[0].instructions.append(p[1])
+        return p[0]
 
     @_('variable_definition', 'variable_assignment', 'variable_definition_assignment', 'condition', 'function_call',
-       'function_definition', 'return_statement', 'while_loop')
+       'function_definition', 'while_loop', 'return_statement')
     def instruction(self, p):
         return p[0]
 
@@ -58,10 +61,10 @@ class FloParser(Parser):
        'SI "(" expr ")" scope SINON scope'
        )
     def condition(self, p):
-        if len(p) == 4:
+        if len(p) == 5:
             return arbre_abstrait.Condition(p.expr, p.scope, None)
         else:
-            return arbre_abstrait.Condition(p.expr, p.scope, p[-1])
+            return arbre_abstrait.Condition(p.expr, p.scope0, p.scope1)
 
     @_('SI "(" expr ")" scope elif_list')
     def condition(self, p):
@@ -69,11 +72,17 @@ class FloParser(Parser):
 
     @_('SINON SI "(" expr ")" scope')
     def elif_list(self, p):
-        return arbre_abstrait.Condition(p.expr, p.scope, None)
+        condition = arbre_abstrait.Condition(p.expr, p.scope, None)
+        instructions = arbre_abstrait.ListeInstructions()
+        instructions.instructions.append(condition)
+        return instructions
 
     @_('SINON SI "(" expr ")" scope elif_list')
     def elif_list(self, p):
-        return arbre_abstrait.Condition(p.expr, p.scope, p.elif_list)
+        condition = arbre_abstrait.Condition(p.expr, p.scope, p.elif_list)
+        instructions = arbre_abstrait.ListeInstructions()
+        instructions.instructions.append(condition)
+        return instructions
 
     @_("SINON scope")
     def elif_list(self, p):
@@ -119,9 +128,20 @@ class FloParser(Parser):
     def instruction(self, p):
         return p.function_call
 
-    @_('TYPE IDENTIFIANT "(" parameter_list ")" scope')
+    @_('TYPE IDENTIFIANT new_scope "(" parameter_list ")"')
+    def function_declaration(self, p):
+        func = arbre_abstrait.FunctionDeclaration(p.TYPE, p.IDENTIFIANT, p.parameter_list)
+        return func
+
+    @_('TYPE IDENTIFIANT new_scope "(" ")"')
+    def function_declaration(self, p):
+        func = arbre_abstrait.FunctionDeclaration(p.TYPE, p.IDENTIFIANT, arbre_abstrait.ParameterList())
+        return func
+
+    @_('function_declaration "{" listeInstructions "}"')
     def function_definition(self, p):
-        func = arbre_abstrait.FunctionDefinition(p.TYPE, p.IDENTIFIANT, p.parameter_list, p.scope)
+        func = p.function_declaration
+        func.set_scope(p.listeInstructions)
         arbre_abstrait.pop_scope()
         return func
 
@@ -140,13 +160,9 @@ class FloParser(Parser):
         p[2].insert(0, p[0])
         return p[2]
 
-    @_("RETOURNER expr")
+    @_("RETOURNER expr ';'")
     def return_statement(self, p):
         return arbre_abstrait.ReturnStatement(p.expr)
-
-    @_('return_statement ";"')
-    def instruction(self, p):
-        return p.return_statement
 
     @_('expr')
     def expr_list(self, p):
@@ -158,6 +174,10 @@ class FloParser(Parser):
     def expr_list(self, p):
         p[2].insert(0, p[0])
         return p[2]
+
+    @_('"-" expr %prec UMINUS')
+    def expr(self, p):
+        return arbre_abstrait.Operation("*", arbre_abstrait.Entier(-1), p.expr)  # p.expr = p[1]
 
     @_('expr "+" expr',
        'expr "-" expr',
@@ -172,7 +192,7 @@ class FloParser(Parser):
        'expr DIFFERENT expr',
        'expr ET expr',
        'expr OU expr',
-       'NON expr'
+       'NON expr',
        )
     def expr(self, p):
         if len(p) == 3:
