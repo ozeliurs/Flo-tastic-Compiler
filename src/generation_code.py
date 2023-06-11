@@ -1,6 +1,7 @@
 import sys
 from copy import deepcopy
 
+import analyse_syntaxique
 import arbre_abstrait
 from analyse_lexicale import FloLexer
 from analyse_syntaxique import FloParser
@@ -90,12 +91,32 @@ def gen_programme(programme):
     for instruction in programme_copy.liste_instructions.instructions:
         if type(instruction) == arbre_abstrait.FunctionDeclaration:
             gen_def_fonction(instruction)
-    printifm('_start:')
-    is_in_function = False
+    printifm('main:')
+
+    nasm_instruction("push", "ebp", "", "", "")
+    nasm_instruction("mov", "ebp", "esp", "", "")
+    # allocating space for local variables
+    variable_defs = programme_copy.liste_instructions.get_variable_definitions()
+    # flatten the list of lists of variable definitions
+    while is_nested(variable_defs):
+        variable_defs = flatten(variable_defs)
+
+    space_for_local_variables = len(variable_defs) * 4
+    nasm_instruction("sub", "esp", str(space_for_local_variables), "", "")
+    for i in range(len(variable_defs)):
+        variable_defs[i].offset = f"-{(i + 1) * 4}"
+
+    global is_in_function
     gen_listeInstructions(programme_copy.liste_instructions)
+    nasm_instruction("leave", "", "", "", "")
+    nasm_instruction("ret", "", "", "", "")
+
+    printifm("_start:")
+    nasm_instruction("call", "main", "", "", "")
     nasm_instruction("mov", "eax", "1", "", "1 est le code de SYS_EXIT")
     nasm_instruction("mov", "ebx", "0", comment="0 est le code de retour correct ici")
     nasm_instruction("int", "0x80", "", "", "exit")
+
 
 
 """
@@ -137,9 +158,25 @@ def gen_instruction(instruction):
     elif type(instruction) == arbre_abstrait.WhileLoop:
         gen_while(instruction)
 
+    elif type(instruction) == arbre_abstrait.FunctionCall:
+        gen_function_call(instruction)
+    elif type(instruction) == arbre_abstrait.VariableAssignment:
+        gen_variable_assignment(instruction)
+
+    elif type(instruction) == arbre_abstrait.VariableDefinitionAssignment:
+        gen_variable_definition_assignment(instruction)
+
+    elif type(instruction) == arbre_abstrait.VariableDefinition:
+        pass
     else:
         print("_type instruction inconnu", type(instruction))
         exit(0)
+
+
+def gen_variable_definition_assignment(instruction: arbre_abstrait.VariableDefinitionAssignment):
+    gen_expression(instruction.exp)
+    nasm_instruction("pop", "eax", "", "", "")
+    nasm_instruction("mov", f"[ebp{instruction.offset}]", "eax", "", "")
 
 
 """
@@ -153,29 +190,73 @@ def gen_ecrire(ecrire: arbre_abstrait.FunctionCall):
     nasm_instruction("call", "iprintLF", "", "", "")  # on envoie la valeur d'eax sur la sortie standard
 
 
+def gen_function_call(function_call: arbre_abstrait.FunctionCall):
+    for arg in function_call.args:
+        gen_expression(arg)
+    nasm_instruction("call", f"_{function_call.function_name}", "", "", "")
+    nasm_instruction("push", "eax", "", "", "")
+
+
 """
 Affiche le code nasm pour calculer et empiler la valeur d'une expression
 """
 
 
+def is_nested(l):
+    for i in l:
+        if type(i) == list:
+            return True
+    return False
+
+
+def flatten(l):
+    l2 = []
+    for i in l:
+        if type(i) == list:
+            l2 += i
+        else:
+            l2.append(i)
+    return l2
+
+
 def gen_def_fonction(function: arbre_abstrait.FunctionDeclaration):
     printift(f"_{function.name}:")
-    # nasm_instruction("push", "ebp", "", "", "")
-    # nasm_instruction("mov", "ebp", "esp", "", "")
-    # nasm_instruction("sub", "esp", str(len(function.args) * 4), "", "")
-    # for i in range(len(function.args)):
-    #     nasm_instruction("mov", "eax", "[ebp+" + str(i * 4 + 8) + "]", "", "")
-    #     nasm_instruction("mov", "[ebp+" + str(i * 4 - 4) + "]", "eax", "", "")
+    nasm_instruction("push", "ebp", "", "", "")
+    nasm_instruction("mov", "ebp", "esp", "", "")
+    # storing the arguments in FunctionDeclaration.args
+    for i in range(len(function.args)):
+        function.args[i].offset = f"+{(len(function.args) - i - 1) * 4 + 8}"
+
+    # allocating space for local variables
+    variable_defs = function.scope.get_variable_definitions()
+    # flatten the list of lists of variable definitions
+    while is_nested(variable_defs):
+        variable_defs = flatten(variable_defs)
+
+    space_for_local_variables = len(variable_defs) * 4
+    nasm_instruction("sub", "esp", str(space_for_local_variables), "", "")
+    for i in range(len(variable_defs)):
+        variable_defs[i].offset = f"-{(i + 1) * 4}"
+
+    global is_in_function
+    is_in_function = True
     gen_listeInstructions(function.scope)
-    # nasm_instruction("mov", "esp", "ebp", "", "")
-    # nasm_instruction("pop", "ebp", "", "", "")
-    # nasm_instruction("ret", "", "", "", "")
+    nasm_instruction("leave", "", "", "", "")
+    nasm_instruction("ret", "", "", "", "")
+    is_in_function = False
 
 
 def gen_return_statement(return_statement: arbre_abstrait.ReturnStatement):
     gen_expression(return_statement.exp)
     nasm_instruction("pop", "eax", "", "", "")
+    nasm_instruction("leave", "", "", "", "")
     nasm_instruction("ret", "", "", "", "")
+
+
+def gen_variable_read(variable_read: arbre_abstrait.VariableRead):
+    nasm_instruction("mov", "eax", f"[ebp{variable_read.definition.offset}]", "",
+                     comment=f"read {variable_read.definition}")
+    nasm_instruction("push", "eax", "", "", comment=f"push {variable_read.definition}")
 
 
 def gen_condition(condition: arbre_abstrait.Condition):
@@ -208,11 +289,10 @@ def gen_while(while_statement: arbre_abstrait.WhileLoop):
     nasm_instruction("push", "eax", "", "", "")
 
 
-def gen_function_call(function_call: arbre_abstrait.FunctionCall):
-    for arg in function_call.args:
-        gen_expression(arg)
-    nasm_instruction("call", f"_{function_call.function_name}", "", "", "")
-    nasm_instruction("push", "eax", "", "", "")
+def gen_variable_assignment(variable_assignment: arbre_abstrait.VariableAssignment):
+    gen_expression(variable_assignment.exp)
+    nasm_instruction("pop", "eax", "", "", "")
+    nasm_instruction("mov", f"[ebp{variable_assignment.definition.offset}]", "eax", "", "")
 
 
 def gen_expression(expression):
@@ -225,11 +305,15 @@ def gen_expression(expression):
         nasm_instruction("push", str(int(expression.value)), "", "", "")
 
     elif type(expression) == arbre_abstrait.FunctionCall and expression.function_name == "ecrire":
-            gen_ecrire(expression)
+        gen_ecrire(expression)
     elif type(expression) == arbre_abstrait.FunctionCall and expression.function_name == "lire":
         gen_lire(expression)
     elif type(expression) == arbre_abstrait.FunctionCall:
         gen_function_call(expression)
+    elif type(expression) == arbre_abstrait.VariableRead:
+        gen_variable_read(expression)
+
+
     else:
         print("_type d'expression inconnu", type(expression))
         exit(0)
@@ -320,8 +404,6 @@ def gen_operation(operation):
 
 if __name__ == "__main__":
     afficher_nasm = True
-    lexer = FloLexer()
-    parser = FloParser()
     if len(sys.argv) < 3 or sys.argv[1] not in ["-nasm", "-table"]:
         print("usage: python3 generation_code.py -nasm|-table NOM_FICHIER_SOURCE.flo")
         exit(0)
@@ -332,7 +414,7 @@ if __name__ == "__main__":
     with open(sys.argv[2], "r") as f:
         data = f.read()
         try:
-            arbre = parser.parse(lexer.tokenize(data))
+            arbre = analyse_syntaxique.parse(data)
             gen_programme(arbre)
         except EOFError:
             exit()

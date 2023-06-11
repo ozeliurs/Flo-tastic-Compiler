@@ -2,6 +2,7 @@ from unittest import TestCase
 
 from sly import Parser, Lexer
 
+import analyse_syntaxique
 import arbre_abstrait
 from analyse_lexicale import FloLexer
 from analyse_syntaxique import FloParser
@@ -13,7 +14,7 @@ class TestFloParser(TestCase):
     lexer: Lexer = FloLexer()
     parser: Parser = FloParser()
     TEST_FILES = [
-        DATA_DIR / "input/fonction_2.flo",
+        DATA_DIR / "input/fonction_3.flo",
     ]
 
     TEST_FILES_BAD = (DATA_DIR / "bad_input").iterdir()
@@ -35,6 +36,7 @@ class TestFloParser(TestCase):
                 tokens = self.lexer.tokenize(data)
                 tree = self.parser.parse(tokens)
                 tree.afficher()
+                print(tree.liste_instructions.get_variable_definitions())
                 gen_programme(tree)
 
     def test_bad(self):
@@ -42,17 +44,12 @@ class TestFloParser(TestCase):
             with self.subTest(file=file):
                 with open(file, "r", encoding="utf8") as f:
                     data = f.read()
-                    arbre_abstrait.reset_stack()
-                    tokens = self.lexer.tokenize(data)
                     with self.assertRaises(Exception):
-                        self.parser.parse(tokens)
+                        analyse_syntaxique.parse(data)
 
     def test_good(self):
         for file in self.TEST_FILES_GOOD:
             with self.subTest(file=file):
                 with open(file, "r", encoding="utf8") as f:
                     data = f.read()
-                    tokens = self.lexer.tokenize(data)
-                    self.parser.parse(tokens)
-
-
+                    analyse_syntaxique.parse(data)

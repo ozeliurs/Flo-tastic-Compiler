@@ -27,7 +27,6 @@ class FloParser(Parser):
     @_('listeInstructions')
     def prog(self, p):
         p = arbre_abstrait.Programme(p[0])
-        arbre_abstrait.reset_stack()
         return p
 
     @_('instruction')
@@ -219,6 +218,18 @@ class FloParser(Parser):
     @_('IDENTIFIANT')
     def expr(self, p):
         return arbre_abstrait.VariableRead(p.IDENTIFIANT)
+
+
+def parse(data):
+    lexer = FloLexer()
+    parser = FloParser()
+    arbre_abstrait.TYPE_CHECKING = False
+    parser.parse(lexer.tokenize(data))
+    function_definitions = arbre_abstrait.stack[0]['functions']
+    arbre_abstrait.reset_stack()
+    arbre_abstrait.TYPE_CHECKING = True
+    arbre_abstrait.stack[0]['functions'] = function_definitions
+    return parser.parse(lexer.tokenize(data))
 
 
 if __name__ == '__main__':
